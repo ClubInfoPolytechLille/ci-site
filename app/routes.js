@@ -1,59 +1,45 @@
-// app/routes.js
-
-// grab the nerd model we just created
-var Nerd = require('./models/nerd');
+var Membre = require('./models/membre');
 
 module.exports = function (app) {
 
-    // server routes ===========================================================
-    // handle things like api calls
-    // authentication routes
-
-    // sample api route
-    app.get('/api/nerds', function (req, res) {
-        // use mongoose to get all nerds in the database
-        Nerd.find(function (err, nerds) {
+    app.get('/api/membres', function (req, res) {
+        Membre.find(function (err, membres) {
             if (err)
                 res.send(err);
-            res.json(nerds);
+            res.json(membres);
         });
     });
-    app.post('/api/nerds', function (req, res) {
-        Nerd.create({
+    app.post('/api/membres', function (req, res) {
+        Membre.create({
             login: req.body.login,
             role: req.body.role,
             section: req.body.section,
-        }, function (err, nerd) {
+        }, function (err, membre) {
             if (err)
                 res.send(err);
-            Nerd.find(function (err, nerds) {
+            Membre.find(function (err, membres) {
                 if (err)
                     res.send(err);
-                res.json(nerds);
+                res.json(membres);
             });
         });
     });
-    app.delete('/api/nerds/:nerd_id', function (req, res) {
-        Nerd.remove({
-            _id: req.params.nerd_id
-        }, function (err, nerd) {
+    app.delete('/api/membres/:membre_id', function (req, res) {
+        Membre.remove({
+            _id: req.params.membre_id
+        }, function (err, membre) {
             if (err)
                 res.send(err);
-            Nerd.find(function (err, nerds) {
+            Membre.find(function (err, membres) {
                 if (err)
                     res.send(err);
-                res.json(nerds);
+                res.json(membres);
             });
         })
     })
 
-    // route to handle creating goes here (app.post)
-    // route to handle delete goes here (app.delete)
-
-    // frontend routes =========================================================
-    // route to handle all angular requests
     app.get('*', function (req, res) {
-        res.sendfile('./public/views/index.html'); // load our public/index.html file
+        res.sendfile('./public/views/index.html');
     });
 
 };

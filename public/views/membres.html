@@ -1,9 +1,9 @@
 <div class="container">
     <!-- HEADER AND TODO COUNT -->
     <div class="jumbotron text-center">
-        <h1>Il y a <span class="label label-info">{{ nerds.length }}</span> personnes au Club Info !</h1>
+        <h1>Il y a <span class="label label-info">{{ membres.length }}</span> personnes au Club Info !</h1>
     </div>
-    <table id="nerd-list">
+    <table id="membre-list">
         <thead>
             <tr>
                 <th>Nom</th>
@@ -12,18 +12,18 @@
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody ng-repeat="nerd in nerds">
+        <tbody ng-repeat="membre in membres">
             <tr>
-                <td>{{ nerd.login }}</td>
-                <td>{{ nerd.section }}</td>
-                <td>{{ nerd.role }}</td>
-                <td><button type="button" class="btn btn-danger" aria-label="Expulser" ng-click="deleteNerd(nerd._id)">
+                <td>{{ membre.login }}</td>
+                <td>{{ membre.section }}</td>
+                <td>{{ membre.role }}</td>
+                <td><button type="button" class="btn btn-danger" aria-label="Expulser" ng-click="deleteMembre(membre._id)">
                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     </button>
                 </td>
             </tr>
         </tbody>
-        <tfoot id="nerd-form">
+        <tfoot id="membre-form">
         <tr class="form-group">
             <td>
                 <input type="text" class="form-control input-lg" placeholder="Login" ng-model="formData.login">
@@ -35,7 +35,7 @@
                 <input type="text" class="form-control input-lg" placeholder="Rôle" ng-model="formData.role">
             </td>
             <td>
-                <button type="submit" class="btn btn-primary" aria-label="Ajouter" ng-click="createNerd()">
+                <button type="submit" class="btn btn-primary" aria-label="Ajouter" ng-click="createMembre()">
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                 </button>
             </td>

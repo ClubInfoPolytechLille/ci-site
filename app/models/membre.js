@@ -1,11 +1,7 @@
-// app/models/nerd.js
-// grab the mongoose module
 var mongoose = require('mongoose');
 
-// define our nerd model
-// module.exports allows us to pass this to other files when it is called
-module.exports = mongoose.model('Nerd', {
-    login: {
+module.exports = mongoose.model('Membre', {
+    login: { // On récupèrera le nom via les passwd
         type: String,
         default: 'login'
     },
@@ -13,7 +9,7 @@ module.exports = mongoose.model('Nerd', {
         type: String,
         default: 'IMA'
     },
-    promo: {
+    promo: { // Nécessaire pour calculer le numéro de section
         type: Number,
         default: 2017
     },

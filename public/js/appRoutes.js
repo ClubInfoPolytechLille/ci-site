@@ -6,14 +6,13 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider',
 
         // home page
         .when('/', {
-            templateUrl: 'views/home.html',
-            controller: 'MainController'
+            templateUrl: 'views/home.html'
         })
 
-        // nerds page that will use the NerdController
-        .when('/nerds', {
-            templateUrl: 'views/nerd.html',
-            controller: 'NerdController'
+        // membres page that will use the MembreController
+        .when('/membres', {
+            templateUrl: 'views/membres.html',
+            controller: 'MembreController'
         });
 
         $locationProvider.html5Mode(true);

@@ -8,25 +8,24 @@
         <title>Club Informatique de Polytech Lille</title>
         <!-- CSS -->
         <link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/style.css"> <!-- custom styles -->
+        <link rel="stylesheet" href="css/style.css">
         <!-- JS -->
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        <script src="libs/jquery/dist/jquery.min.js"></script>
         <script src="libs/angular/angular.min.js"></script>
         <script src="libs/angular-route/angular-route.min.js"></script>
-        <script src="js/controllers/MainCtrl.js"></script>
-        <script src="js/controllers/NerdCtrl.js"></script>
-        <script src="js/services/NerdService.js"></script>
+        <!-- APP -->
+        <script src="js/controllers/MembreCtrl.js"></script>
         <script src="js/appRoutes.js"></script>
         <script src="js/app.js"></script>
     </head>
-    <body ng-app="sampleApp" ng-controller="NerdController">
+    <body ng-app="ciApp">
         <div class="container">
             <nav class="navbar navbar-inverse">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="/">Club Info</a>
                 </div>
                 <ul class="nav navbar-nav">
-                    <li><a href="/nerds">Nerds</a></li>
+                    <li><a href="/membres">Membres</a></li>
                 </ul>
             </nav>
             <div ng-view></div>

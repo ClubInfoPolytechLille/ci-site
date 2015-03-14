@@ -1,11 +1,11 @@
-// public/js/controllers/NerdCtrl.js
-angular.module('NerdCtrl', []).controller('NerdController', function ($scope, $http) {
+// public/js/controllers/MembreCtrl.js
+angular.module('MembreCtrl', []).controller('MembreController', function ($scope, $http) {
     $scope.formData = {};
 
-    // when landing on the page, get all Nerds and show them
-    $http.get('/api/nerds')
+    // when landing on the page, get all Membres and show them
+    $http.get('/api/membres')
         .success(function (data) {
-            $scope.nerds = data;
+            $scope.membres = data;
             console.log(data);
         })
         .error(function (data) {
@@ -13,23 +13,23 @@ angular.module('NerdCtrl', []).controller('NerdController', function ($scope, $h
         });
 
     // when submitting the add form, send the text to the node API
-    $scope.createNerd = function () {
+    $scope.createMembre = function () {
         console.log('Adding', $scope.formData);
-        $http.post('/api/nerds', $scope.formData)
+        $http.post('/api/membres', $scope.formData)
             .success(function (data) {
                 $scope.formData = {}; // clear the form so our user is ready to enter another
-                $scope.nerds = data;
+                $scope.membres = data;
             })
             .error(function (data) {
                 console.log('Error: ' + data);
             });
     };
 
-    // delete a Nerd after checking it
-    $scope.deleteNerd = function (id) {
-        $http.delete('/api/nerds/' + id)
+    // delete a Membre after checking it
+    $scope.deleteMembre = function (id) {
+        $http.delete('/api/membres/' + id)
             .success(function (data) {
-                $scope.nerds = data;
+                $scope.membres = data;
                 console.log(data);
             })
             .error(function (data) {
