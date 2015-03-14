@@ -1,7 +1,38 @@
 var membres = require('../controllers/membres');
+var sessions = require('../controllers/sessions');
 var express = require('express');
 
 var api = express()
+
+// Sessions
+api.get('/session', function (req, res) { // Informations sur la session
+    if (req.cookies && req.cookies.session) {
+        res.send(sessions.verify(req.cookies.session))
+        // TODO si pas bon : res.clearCookie('session')
+    } else {
+        res.send('missing');
+    }
+});
+
+api.post('/session', function (req, res) { // Se connecter
+    sessions.open(req.body, function (status) {
+        if (typeof status === 'object') {
+            res.cookie('session', status._id);
+        }
+        res.send(status);
+    })
+})
+
+api.delete('/session', function (req, res) { // Se déconnecter
+    if (req.cookies) {
+        sessions.delete(req.cookies.id, function () {
+            res.clearCookie('session');
+        })
+    } else {
+        res.send('missing')
+    }
+})
+
 
 // Membres
 api.get('/membres', function (req, res) { // Liste des membres

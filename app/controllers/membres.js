@@ -14,7 +14,7 @@ membres.add = function (data, cb) {
     }, cb);
 }
 
-membres.delete = function (id, cb) {
+membres.remove = function (id, cb) {
     Membre.remove({
         _id: id
     }, cb);
