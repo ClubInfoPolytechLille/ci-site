@@ -1,1 +1,1 @@
-angular.module('ciApp', ['ngRoute', 'appRoutes', 'MembreCtrl']);
+angular.module('ciApp', ['ngRoute', 'appRoutes', 'MembreCtrl', 'SessionsServ', 'SessionsCtrl']);

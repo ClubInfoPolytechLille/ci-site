@@ -3,17 +3,17 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider',
     function ($routeProvider, $locationProvider) {
 
         $routeProvider
-
-        // home page
-        .when('/', {
-            templateUrl: 'views/home.html'
-        })
-
-        // membres page that will use the MembreController
-        .when('/membres', {
-            templateUrl: 'views/membres.html',
-            controller: 'MembreController'
-        });
+            .when('/', {
+                templateUrl: 'views/home.html'
+            })
+            .when('/membres', {
+                templateUrl: 'views/membres.html',
+                controller: 'MembreController'
+            })
+            .when('/connect', {
+                templateUrl: 'views/connect.html'
+                // controller: 'ConnectController'
+            });
 
         $locationProvider.html5Mode(true);
 
