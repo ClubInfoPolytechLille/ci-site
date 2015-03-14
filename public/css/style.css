@@ -1,0 +1,9 @@
+html {
+    overflow-y: scroll;
+}
+body {
+    padding-top: 50px;
+}
+#nerd-list {
+	width: 90 %;
+}

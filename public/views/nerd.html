@@ -1,7 +1,45 @@
-<!-- public/views/nerd.html -->
-
-<div class="jumbotron text-center">
-    <h1>Nerds and Proud</h1>
-
-    <p>{{ tagline }}</p>
+<div class="container">
+    <!-- HEADER AND TODO COUNT -->
+    <div class="jumbotron text-center">
+        <h1>Il y a <span class="label label-info">{{ nerds.length }}</span> personnes au Club Info !</h1>
+    </div>
+    <table id="nerd-list">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Section</th>
+                <th>Rôle</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody ng-repeat="nerd in nerds">
+            <tr>
+                <td>{{ nerd.login }}</td>
+                <td>{{ nerd.section }}</td>
+                <td>{{ nerd.role }}</td>
+                <td><button type="button" class="btn btn-danger" aria-label="Expulser" ng-click="deleteNerd(nerd._id)">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot id="nerd-form">
+        <tr class="form-group">
+            <td>
+                <input type="text" class="form-control input-lg" placeholder="Login" ng-model="formData.login">
+            </td>
+            <td class="form-inline">
+                <input type="text" class="form-control input-lg" placeholder="Section" ng-model="formData.section"><input type="number" class="form-control input-lg" placeholder="2015" ng-model="formData.promo">
+            </td>
+            <td>
+                <input type="text" class="form-control input-lg" placeholder="Rôle" ng-model="formData.role">
+            </td>
+            <td>
+                <button type="submit" class="btn btn-primary" aria-label="Ajouter" ng-click="createNerd()">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </button>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
 </div>
