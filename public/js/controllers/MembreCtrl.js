@@ -1,10 +1,12 @@
 angular.module('MembreCtrl', []).controller('MembreController', ['$scope', '$http', 'SessionService',
     function ($scope, $http, SessionService) {
         $scope.formData = {};
-        $scope.canAdd = SessionService.logged
-        $scope.canDel = SessionService.logged
 
-        // when landing on the page, get all Membres and show them
+        $scope.session = SessionService.cur
+        SessionService.onChange(function () {
+            $scope.session = SessionService.cur
+        })
+
         $http.get('/api/membres')
             .success(function (data) {
                 $scope.membres = data;
@@ -14,12 +16,11 @@ angular.module('MembreCtrl', []).controller('MembreController', ['$scope', '$htt
                 console.log('Error: ' + data);
             });
 
-        // when submitting the add form, send the text to the node API
         $scope.createMembre = function () {
             console.log('Adding', $scope.formData);
             $http.post('/api/membres', $scope.formData)
                 .success(function (data) {
-                    $scope.formData = {}; // clear the form so our user is ready to enter another
+                    $scope.formData = {};
                     $scope.membres = data;
                 })
                 .error(function (data) {
@@ -27,7 +28,6 @@ angular.module('MembreCtrl', []).controller('MembreController', ['$scope', '$htt
                 });
         };
 
-        // delete a Membre after checking it
         $scope.deleteMembre = function (id) {
             $http.delete('/api/membres/' + id)
                 .success(function (data) {

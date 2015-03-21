@@ -1,8 +1,7 @@
 angular.module('SessionsServ', []).service('SessionService', ['$http',
     function ($http) {
         a = {
-            nom: "Invité",
-            logged: false,
+            cur: false,
             status: 0,
             changeHandlers: [],
             onChange: function (fun) {
@@ -14,18 +13,15 @@ angular.module('SessionsServ', []).service('SessionService', ['$http',
                 }
             },
             updateSessionInfos: function (data) {
+                console.log("Connection:", data)
                 if (typeof data === 'object') {
-                    console.log("Connected")
-                    this.logged = true
-                    this.nom = data.nom
+                    this.cur = data
                 } else {
-
-                    this.logged = false
+                    this.cur = false
                 }
                 this.triggerChange()
             },
             get: function (cb) { // Fetch infos if needed
-                console.log("Session: get")
                 if (status == 0) {
                     this.status = 1 // Fetching
                     _this = this
@@ -41,11 +37,10 @@ angular.module('SessionsServ', []).service('SessionService', ['$http',
                         }
                     })
                 } else {
-                    console.warn("get multiple times")
+                    console.warn("Unnecessary get() call")
                 }
             },
             connect: function (login, pass, cb) {
-                console.log("Session: connecting with login:", login)
                 _this = this
                 $http.post('/api/session', {
                     login: login,
@@ -62,9 +57,8 @@ angular.module('SessionsServ', []).service('SessionService', ['$http',
                 })
             },
             disconnect: function () {
-                console.log("Session: disconnect", this.name)
+                this.updateSessionInfos(false)
                 $http.delete('/api/session')
-                this.logged = false
             }
         }
         a.get()

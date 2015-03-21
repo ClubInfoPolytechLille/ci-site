@@ -3,6 +3,8 @@ var noms = require('../controllers/noms');
 
 var sessions = {}
 
+sessions.cur = false
+
 sessions.addData = function (session, cb) {
     noms.get(session.login, function (nom) {
         if (typeof nom == 'string') {
@@ -10,6 +12,8 @@ sessions.addData = function (session, cb) {
         } else {
             session.nom = 'Inconnu'
         }
+        session.canAddMembre = session.login == 'gbontoux'
+        session.canDelMembre = session.login == 'gbontoux'
         cb(session)
     })
 }
@@ -45,7 +49,7 @@ sessions.verify = function (id, cb) {
         } else {
             if (session) {
                 if (sessions.valid(session)) {
-                    cb(err, session);
+                    cb(null, session);
                 } else {
                     cb('expired');
                     _this.delete(id)
@@ -55,6 +59,18 @@ sessions.verify = function (id, cb) {
             }
         }
     });
+}
+
+sessions.use = function (id, cb) {
+    _this = this
+    _this.verify(id, function (err, session) {
+        if (err) {
+            cb(err)
+        } else {
+            _this.cur = session
+            cb(null)
+        }
+    })
 }
 
 sessions.create = function (login, cb) {
@@ -89,7 +105,7 @@ sessions.open = function (data, cb) {
                     if (err) {
                         cb('error');
                     } else {
-                        _this.find(session._id, cb)
+                        _this.use(session._id, cb)
                     }
                 });
             } else {

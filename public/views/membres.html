@@ -10,7 +10,7 @@
                 <th>Nom</th>
                 <th>Section</th>
                 <th>Rôle</th>
-                <th ng-if="canAdd || canDel">Action</th>
+                <th ng-if="session.canAddMembre || session.canDelMembre">Action</th>
             </tr>
         </thead>
         <tbody ng-repeat="membre in membres">
@@ -18,13 +18,13 @@
                 <td>{{ membre.login }}</td>
                 <td>{{ membre.section }}</td>
                 <td>{{ membre.role }}</td>
-                <td ng-if="canDel"><button type="button" class="btn btn-danger" aria-label="Expulser" ng-click="deleteMembre(membre._id)">
+                <td ng-if="session.canDelMembre"><button type="button" class="btn btn-danger" aria-label="Expulser" ng-click="deleteMembre(membre._id)">
                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     </button>
                 </td>
             </tr>
         </tbody>
-        <tfoot id="membre-form" ng-if="canAdd">
+        <tfoot id="membre-form" ng-if="session.canAddMembre">
         <tr class="form-group">
             <td>
                 <input type="text" class="form-control input-lg" placeholder="Login" ng-model="formData.login">

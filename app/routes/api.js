@@ -7,11 +7,11 @@ var api = express()
 // Sessions
 api.get('/session', function (req, res) { // Informations sur la session
     if (req.cookies && req.cookies.session) {
-        sessions.verify(req.cookies.session, function (err, session) {
+        sessions.use(req.cookies.session, function (err) {
             if (err) {
                 res.send(err)
             } else {
-                res.send(session)
+                res.send(sessions.cur)
             }
         })
         // TODO si pas bon : res.clearCookie('session')
@@ -21,12 +21,12 @@ api.get('/session', function (req, res) { // Informations sur la session
 });
 
 api.post('/session', function (req, res) { // Se connecter
-    sessions.open(req.body, function (err, session) {
+    sessions.open(req.body, function (err) {
         if (err) {
             res.send(err)
         } else {
-            res.cookie('session', session._id);
-            res.send(session)
+            res.cookie('session', sessions.cur._id);
+            res.send(sessions.cur)
         }
     })
 })
@@ -42,6 +42,20 @@ api.delete('/session', function (req, res) { // Se déconnecter
     }
 })
 
+ifPermission = function (req, res, perm, cb) {
+    sessions.use(req.cookies.session, function (err) {
+        if (err) {
+            res.status(403).end()
+        } else {
+            if (sessions.cur[perm]) {
+                cb()
+            } else {
+                res.status(403).end()
+            }
+        }
+    })
+}
+
 
 // Membres
 api.get('/membres', function (req, res) { // Liste des membres
@@ -53,27 +67,31 @@ api.get('/membres', function (req, res) { // Liste des membres
 });
 
 api.post('/membres', function (req, res) { // Ajout d'un membre
-    membres.add(req.body, function (err, membre) {
-        if (err)
-            res.send(err);
-        membres.list(function (err, membres) {
+    ifPermission(req, res, 'canAddMembre', function () {
+        membres.add(req.body, function (err, membre) {
             if (err)
                 res.send(err);
-            res.json(membres);
+            membres.list(function (err, membres) {
+                if (err)
+                    res.send(err);
+                res.json(membres);
+            });
         });
-    });
+    })
 });
 
 api.delete('/membres/:membre_id', function (req, res) { // Supression d'un membre
-    membres.remove(req.params.membre_id, function (err, membre) {
-        if (err)
-            res.send(err);
-        membres.list(function (err, membres) {
+    ifPermission(req, res, 'canDelMembre', function () {
+        membres.remove(req.params.membre_id, function (err, membre) {
             if (err)
                 res.send(err);
-            res.json(membres);
+            membres.list(function (err, membres) {
+                if (err)
+                    res.send(err);
+                res.json(membres);
+            });
         });
-    });
+    })
 })
 
 module.exports = api;
