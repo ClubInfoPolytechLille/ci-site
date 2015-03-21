@@ -1,5 +1,6 @@
 var Noms = require('../models/noms');
-var lineReader = require('line-reader');
+var LineTransform = require('node-line-reader').LineTransform;
+var fs = require('fs')
 
 var noms = {}
 
@@ -15,26 +16,25 @@ noms.get = function (login, cb) {
                 cb(nom.nom)
             } else {
                 found = false
-                try {
-                    lineReader.eachLine('config/passwd', function (line, last, cbL) {
-                        ex = line.split(':')
-                        // console.log(ex);
-                        if (ex[0] == login) { // Si trouvé
-                            found = true
-                            cb(ex[4])
-                            cbL(false);
-                        } else {
-                            cbL();
-                        }
-                    }).then(function () {
-                        if (!found) {
-                            cb(false)
-                        }
-                    });
-                } catch (e) {
+                stream = fs.createReadStream('config/passwd')
+                transform = new LineTransform()
+                stream.pipe(transform)
+                transform.on('data', function (line) {
+                    ex = line.split(':')
+                    if (ex[0] == login) { // Si trouvé
+                        found = true
+                        cb(ex[4])
+                    }
+                })
+                transform.on('end', function () {
+                    if (!found) {
+                        cb(false)
+                    }
+                })
+                transform.on('error', function (e) {
                     console.error("Error while fetching name", e)
                     cb(login.toUpperCase())
-                }
+                })
             }
         }
     })
