@@ -5,14 +5,14 @@ var fs = require('fs')
 var noms = {}
 
 noms.get = function (login, cb) {
-    Noms.find({
+    Noms.findOne({
         login: login
     }, function (err, nom) {
         if (err) {
             console.error(err)
             cb(false)
         } else {
-            if (nom.length >= 1) {
+            if (nom) {
                 cb(nom.nom)
             } else {
                 passwdF = 'config/passwd'
@@ -24,11 +24,14 @@ noms.get = function (login, cb) {
                         stream.pipe(transform)
                         transform.on('data', function (line) {
                             ex = line.split(':')
-                            console.log(line)
                             if (ex[0] == login) { // Si trouvé
-                                found = true
                                 stream.close()
                                 cb(ex[4])
+                                found = true
+                                Noms.create({
+                                    login: login,
+                                    nom: ex[4]
+                                })
                             }
                         })
                         transform.on('end', function () {

@@ -24,7 +24,6 @@ api.post('/session', function (req, res) { // Se connecter
     sessions.open(req.body, function (err, session) {
         if (err) {
             res.send(err)
-            console.error(err)
         } else {
             res.cookie('session', session._id);
             res.send(session)
