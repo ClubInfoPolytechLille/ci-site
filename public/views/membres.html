@@ -15,7 +15,7 @@
         </thead>
         <tbody ng-repeat="membre in membres">
             <tr>
-                <td>{{ membre.login }}</td>
+                <td>{{ membre.nom }}</td>
                 <td>{{ membre.section }}</td>
                 <td>{{ membre.role }}</td>
                 <td ng-if="session.canDelMembre"><button type="button" class="btn btn-danger" aria-label="Expulser" ng-click="deleteMembre(membre._id)">
