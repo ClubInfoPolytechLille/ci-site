@@ -24,8 +24,10 @@ noms.get = function (login, cb) {
                         stream.pipe(transform)
                         transform.on('data', function (line) {
                             ex = line.split(':')
+                            console.log(line)
                             if (ex[0] == login) { // Si trouvé
                                 found = true
+                                stream.close()
                                 cb(ex[4])
                             }
                         })
