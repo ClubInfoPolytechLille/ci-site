@@ -2,10 +2,6 @@ var Session = require('../models/session');
 
 var sessions = {}
 
-sessions.find = function (id, cb) {
-    Session.findById(id, cb)
-}
-
 sessions.valid = function (session) {
     return session.started.setSeconds(session.started.getSeconds() + 3600) > new Date()
 }

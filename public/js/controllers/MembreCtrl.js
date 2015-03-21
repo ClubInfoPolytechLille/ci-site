@@ -1,6 +1,8 @@
-angular.module('MembreCtrl', []).controller('MembreController', ['$scope', '$http',
-    function ($scope, $http) {
+angular.module('MembreCtrl', []).controller('MembreController', ['$scope', '$http', 'SessionService',
+    function ($scope, $http, SessionService) {
         $scope.formData = {};
+        $scope.canAdd = SessionService.logged
+        $scope.canDel = SessionService.logged
 
         // when landing on the page, get all Membres and show them
         $http.get('/api/membres')
