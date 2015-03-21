@@ -1,12 +1,11 @@
-angular.module('SessionsCtrl', []).controller('SessionController', ['$scope', '$http', 'SessionService',
-    function ($scope, $http, SessionService) {
-        $scope.session = {
-            logged: true,
-            name: SessionService.get()
-        }
-
-        $scope.disconnect = function () {
-            $scope.session.logged = false;
-        }
+angular.module('SessionsCtrl', []).controller('SessionController', ['$scope', 'SessionService',
+    function ($scope, SessionService) {
+        $scope.session = SessionService
+        // $scope.session.onChange(function () {
+        //     // TODO
+        // })
+        // $scope.$on("$destroy", function () {
+        //     // TODO
+        // })
     }
 ]);

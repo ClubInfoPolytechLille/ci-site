@@ -7,7 +7,13 @@ var api = express()
 // Sessions
 api.get('/session', function (req, res) { // Informations sur la session
     if (req.cookies && req.cookies.session) {
-        res.send(sessions.verify(req.cookies.session))
+        sessions.verify(req.cookies.session, function (err, session) {
+            if (err) {
+                res.send(err)
+            } else {
+                res.send(session)
+            }
+        })
         // TODO si pas bon : res.clearCookie('session')
     } else {
         res.send('missing');
@@ -24,9 +30,10 @@ api.post('/session', function (req, res) { // Se connecter
 })
 
 api.delete('/session', function (req, res) { // Se déconnecter
-    if (req.cookies) {
-        sessions.delete(req.cookies.id, function () {
+    if (req.cookies.session) {
+        sessions.delete(req.cookies.session, function () {
             res.clearCookie('session');
+            res.end()
         })
     } else {
         res.send('missing')

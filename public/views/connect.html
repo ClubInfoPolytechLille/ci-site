@@ -5,12 +5,12 @@
     <form>
         <div class="form-group">
             <label for="login">Identifiant</label>
-            <input type="text" class="form-control" id="login" placeholder="Identifiant Polytech">
+            <input type="text" class="form-control" id="login" ng-model="connect.login" placeholder="Identifiant Polytech">
         </div>
         <div class="form-group">
             <label for="pass">Mot de passe</label>
-            <input type="password" class="form-control" id="pass" placeholder="Mot de passe Polytech">
+            <input type="password" class="form-control" id="pass" ng-model="connect.pass" placeholder="Mot de passe Polytech">
         </div>
-        <button type="submit" class="btn btn-default">Se connecter</button>
+        <button type="submit" class="btn btn-default" ng-click="connect.connect()">Se connecter</button>
     </form>
 </div>

@@ -3,13 +3,11 @@ var Session = require('../models/session');
 var sessions = {}
 
 sessions.find = function (id, cb) {
-    Session.find({
-        '_id': id
-    }, cb)
+    Session.findById(id, cb)
 }
 
 sessions.valid = function (session) {
-    return session.started + 3600 > Date.now()
+    return session.started.setSeconds(session.started.getSeconds() + 3600) > new Date()
 }
 
 sessions.delete = function (id, cb) {
@@ -18,20 +16,21 @@ sessions.delete = function (id, cb) {
     }, cb);
 }
 
-sessions.close = function (id, cb) {
-
-}
-
 sessions.verify = function (id, cb) {
-    session.find(id, function (err, session) {
+    _this = this
+    Session.findById(id, function (err, session) {
         if (err) {
             cb('error');
         } else {
-            if (sessions.valid(session)) {
-                cb(session);
+            if (session) {
+                if (sessions.valid(session)) {
+                    cb(err, session);
+                } else {
+                    cb('expired');
+                    _this.delete(id)
+                }
             } else {
-                cb('expired');
-                sessions.delete(id)
+                cb('unknown')
             }
         }
     });
