@@ -1,7 +1,7 @@
 angular.module('SessionsServ', []).service('SessionService', ['$http',
     function ($http) {
         a = {
-            name: "Invité",
+            nom: "Invité",
             logged: false,
             status: 0,
             changeHandlers: [],
@@ -17,7 +17,7 @@ angular.module('SessionsServ', []).service('SessionService', ['$http',
                 if (typeof data === 'object') {
                     console.log("Connected")
                     this.logged = true
-                    this.name = data.login
+                    this.nom = data.nom
                 } else {
 
                     this.logged = false

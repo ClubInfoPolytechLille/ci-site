@@ -1,6 +1,31 @@
 var Session = require('../models/session');
+var noms = require('../controllers/noms');
 
 var sessions = {}
+
+sessions.addData = function (session, cb) {
+    noms.get(session.login, function (nom) {
+        if (typeof nom == 'string') {
+            session.nom = nom
+        } else {
+            session.nom = 'Inconnu'
+        }
+        cb(session)
+    })
+}
+
+sessions.find = function (id, cb) {
+    _this = this
+    Session.findById(id).lean().exec(function (err, session) {
+        if (typeof session == 'object') {
+            _this.addData(session, function (session) {
+                cb(err, session)
+            })
+        } else {
+            cb(err, null)
+        }
+    })
+}
 
 sessions.valid = function (session) {
     return session.started.setSeconds(session.started.getSeconds() + 3600) > new Date()
@@ -14,7 +39,7 @@ sessions.delete = function (id, cb) {
 
 sessions.verify = function (id, cb) {
     _this = this
-    Session.findById(id, function (err, session) {
+    _this.find(id, function (err, session) {
         if (err) {
             cb('error');
         } else {
@@ -40,24 +65,31 @@ sessions.create = function (login, cb) {
 
 sessions.login = function (data, cb) {
     // DUMMY
-    if (data.login == 'cool' && data.pass == 'cool') {
-        cb(null, true);
-    } else {
-        cb(null, false);
-    }
+    noms.get(data.login, function (nom) {
+        if (nom == false) {
+            cb(null, false)
+        } else {
+            if (data.pass == 'cool') {
+                cb(null, true)
+            } else {
+                cb(null, false)
+            }
+        }
+    })
 }
 
 sessions.open = function (data, cb) {
-    sessions.login(data, function (err, res) {
+    _this = this
+    _this.login(data, function (err, res) {
         if (err) {
             cb('error')
         } else {
             if (res) {
-                sessions.create(data.login, function (err, session) {
+                _this.create(data.login, function (err, session) {
                     if (err) {
                         cb('error');
                     } else {
-                        cb(session);
+                        _this.find(session._id, cb)
                     }
                 });
             } else {

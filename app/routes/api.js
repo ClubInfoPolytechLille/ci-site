@@ -21,11 +21,14 @@ api.get('/session', function (req, res) { // Informations sur la session
 });
 
 api.post('/session', function (req, res) { // Se connecter
-    sessions.open(req.body, function (status) {
-        if (typeof status === 'object') {
-            res.cookie('session', status._id);
+    sessions.open(req.body, function (err, session) {
+        if (err) {
+            res.send(err)
+            console.error(err)
+        } else {
+            res.cookie('session', session._id);
+            res.send(session)
         }
-        res.send(status);
     })
 })
 
