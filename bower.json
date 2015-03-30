@@ -5,6 +5,7 @@
     "font-awesome": "latest",
     "angular": "latest",
     "angular-route": "latest",
-    "bootswatch-dist": "3.3.2-cerulean"
+    "bootswatch-dist": "3.3.2-cerulean",
+    "jsencrypt": "~2.1.0"
   }
 }

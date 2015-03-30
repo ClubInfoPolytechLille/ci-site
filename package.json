@@ -9,6 +9,7 @@
     "method-override": "^2.3.1",
     "mongoose": "^3.8.25",
     "morgan": "^1.5.1",
-    "node-line-reader": "0.0.2"
+    "node-line-reader": "0.0.2",
+    "ursa": "^0.8.4"
   }
 }
