@@ -1,11 +1,11 @@
 {
-  "name": "ci-site",
-  "version": "0.0.1",
-  "dependencies": {
-    "font-awesome": "latest",
-    "angular": "latest",
-    "angular-route": "latest",
-    "bootswatch-dist": "3.3.2-cerulean",
-    "jsencrypt": "~2.1.0"
-  }
+    "name": "ci-site",
+    "version": "0.0.1",
+    "dependencies": {
+        "font-awesome": "latest",
+        "angular": "latest",
+        "angular-route": "latest",
+        "bootswatch-dist": "3.3.2-cerulean",
+        "jsencrypt": "~2.1.0"
+    }
 }

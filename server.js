@@ -5,7 +5,7 @@ var mongoose = require('mongoose');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
-var cookieParser = require('cookie-parser')
+var cookieParser = require('cookie-parser');
 
 // Application ================================================================
 
@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({
 app.use(methodOverride('X-HTTP-Method-Override'));
 
 // Cookie-parser
-app.use(cookieParser())
+app.use(cookieParser());
 
 // Dossier public
 app.use(express.static(__dirname + '/public'));
