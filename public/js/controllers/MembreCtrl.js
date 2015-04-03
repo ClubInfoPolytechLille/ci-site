@@ -1,5 +1,5 @@
-angular.module('MembreCtrl', []).controller('MembreCtrl', ['$scope', '$http', 'SessionServ',
-    function ($scope, $http, SessionServ) {
+angular.module('MembreCtrl', []).controller('MembreCtrl', ['$scope', '$http', 'SessionServ', 'NotifyServ',
+    function ($scope, $http, SessionServ, NotifyServ) {
         $scope.formData = {};
 
         $scope.session = SessionServ.cur;
@@ -10,21 +10,20 @@ angular.module('MembreCtrl', []).controller('MembreCtrl', ['$scope', '$http', 'S
         $http.get('/api/membres')
             .success(function (data) {
                 $scope.membres = data;
-                console.log(data);
             })
             .error(function (data) {
-                console.log('Error: ' + data);
+                NotifyServ.error("Impossible d'obtenir la liste des membres", data);
             });
 
         $scope.createMembre = function () {
-            console.log('Adding', $scope.formData);
             $http.post('/api/membres', $scope.formData)
                 .success(function (data) {
                     $scope.formData = {};
                     $scope.membres = data;
+                    NotifyServ.success("Membre ajouté");
                 })
                 .error(function (data) {
-                    console.log('Error: ' + data);
+                    NotifyServ.error("Impossible d'ajouter le membre", data);
                 });
         };
 
@@ -32,10 +31,10 @@ angular.module('MembreCtrl', []).controller('MembreCtrl', ['$scope', '$http', 'S
             $http.delete('/api/membres/' + id)
                 .success(function (data) {
                     $scope.membres = data;
-                    console.log(data);
+                    NotifyServ.success("Membre supprimé.");
                 })
                 .error(function (data) {
-                    console.log('Error: ' + data);
+                    NotifyServ.error("Impossible de supprimer le membre", data);
                 });
         };
 

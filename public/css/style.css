@@ -9,3 +9,7 @@ body {
 #membre-list {
     width: 90%;
 }
+
+[data-notify="progressbar"] {
+    display: none;
+}
