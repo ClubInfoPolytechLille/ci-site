@@ -6,19 +6,17 @@ var membres = {};
 
 membres.list = function (cb) {
     Membre.find({}).lean().exec(function (err, membres) {
-        addNom = function (membre, cb) {
+        addNom = function (membre, cbA) {
             noms.get(membre.login, function (nom) {
                 if (nom) {
                     membre.nom = nom;
                 } else {
                     membre.nom = membre.login;
                 }
-                cb(null, membre);
+                cbA(null, membre);
             });
         };
-        async.mapSeries(membres, addNom, function (err, results) {
-            cb(results);
-        });
+        async.mapSeries(membres, addNom, cb);
     });
 };
 

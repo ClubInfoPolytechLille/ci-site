@@ -65,7 +65,8 @@ api.get('/membres', function (req, res) { // Liste des membres
     membres.list(function (err, membres) {
         if (err)
             res.send(err);
-        res.json(membres);
+        else
+            res.json(membres);
     });
 });
 
