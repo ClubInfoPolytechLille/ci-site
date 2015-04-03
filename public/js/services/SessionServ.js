@@ -2,7 +2,6 @@ angular.module('SessionsServ', []).service('SessionServ', ['$http', 'EncryptServ
     function ($http, EncryptServ) {
         a = {
             cur: false,
-            status: 0,
             changeHandlers: [],
             onChange: function (fun) {
                 this.changeHandlers.push(fun);
@@ -22,23 +21,18 @@ angular.module('SessionsServ', []).service('SessionServ', ['$http', 'EncryptServ
                 this.triggerChange();
             },
             get: function (cb) { // Fetch infos if needed
-                if (status === 0) {
-                    this.status = 1; // Fetching
-                    _this = this;
-                    // TODO Verify if cookies to prevent uneeded request
-                    $http.get('/api/session').success(function (body) {
-                        _this.updateSessionInfos(body);
-                        if (cb) {
-                            if (this.logged) {
-                                cb(null);
-                            } else {
-                                cb(body);
-                            }
+                _this = this;
+                // TODO Verify if cookies to prevent uneeded request
+                $http.get('/api/session').success(function (body) {
+                    _this.updateSessionInfos(body);
+                    if (cb) {
+                        if (this.logged) {
+                            cb(null);
+                        } else {
+                            cb(body);
                         }
-                    });
-                } else {
-                    console.warn("Unnecessary get() call");
-                }
+                    }
+                });
             },
             connect: function (login, pass, cb) {
                 _this = this;
