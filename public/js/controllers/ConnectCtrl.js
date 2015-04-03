@@ -3,9 +3,13 @@ angular.module('ConnectCtrl', []).controller('ConnectCtrl', ['$scope', 'SessionS
         EncryptServ.preload(function () {
             return undefined;
         });
+        $scope.connecting = false;
         $scope.connect = {
             connect: function () {
-                SessionServ.connect($scope.connect.login, $scope.connect.pass);
+                $scope.connecting = true;
+                SessionServ.connect($scope.connect.login, $scope.connect.pass, function() {
+                    $scope.connecting = false;
+                });
             }
         };
     }
