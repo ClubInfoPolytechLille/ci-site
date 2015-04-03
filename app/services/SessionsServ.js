@@ -1,5 +1,6 @@
 var SessionModl = require('../models/SessionModl');
 var NomsServ = require('../services/NomsServ');
+var SshAuthServ = require('../services/SshAuthServ');
 
 var sessions = {};
 
@@ -80,18 +81,7 @@ sessions.create = function (login, cb) {
 };
 
 sessions.login = function (data, cb) {
-    // DUMMY
-    NomsServ.get(data.login, function (nom) {
-        if (nom === false) {
-            cb(null, false);
-        } else {
-            if (data.pass == 'cool') {
-                cb(null, true);
-            } else {
-                cb(null, false);
-            }
-        }
-    });
+    SshAuthServ.verify(data.login, data.pass, cb);
 };
 
 sessions.open = function (data, cb) {
