@@ -1,4 +1,3 @@
-// public/js/appRoutes.js
 angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider',
     function ($routeProvider, $locationProvider) {
         $routeProvider
@@ -7,11 +6,11 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider',
             })
             .when('/membres', {
                 templateUrl: 'views/membres.html',
-                controller: 'MembreController'
+                controller: 'MembreCtrl'
             })
             .when('/connect', {
                 templateUrl: 'views/connect.html',
-                controller: 'ConnectController'
+                controller: 'ConnectCtrl'
             });
 
         $locationProvider.html5Mode(true);

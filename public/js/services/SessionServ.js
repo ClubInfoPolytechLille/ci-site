@@ -1,5 +1,5 @@
-angular.module('SessionsServ', []).service('SessionService', ['$http', 'EncryptService',
-    function ($http, EncryptService) {
+angular.module('SessionsServ', []).service('SessionServ', ['$http', 'EncryptServ',
+    function ($http, EncryptServ) {
         a = {
             cur: false,
             status: 0,
@@ -46,7 +46,7 @@ angular.module('SessionsServ', []).service('SessionService', ['$http', 'EncryptS
                     login: login,
                     pass: pass
                 });
-                EncryptService.encrypt(data, function (dataCrypt) {
+                EncryptServ.encrypt(data, function (dataCrypt) {
                     $http.post('/api/session', [dataCrypt]).success(function (body) {
                         _this.updateSessionInfos(body);
                         if (cb) {

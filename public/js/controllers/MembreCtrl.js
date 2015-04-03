@@ -1,10 +1,10 @@
-angular.module('MembreCtrl', []).controller('MembreController', ['$scope', '$http', 'SessionService',
-    function ($scope, $http, SessionService) {
+angular.module('MembreCtrl', []).controller('MembreCtrl', ['$scope', '$http', 'SessionServ',
+    function ($scope, $http, SessionServ) {
         $scope.formData = {};
 
-        $scope.session = SessionService.cur;
-        SessionService.onChange(function () {
-            $scope.session = SessionService.cur;
+        $scope.session = SessionServ.cur;
+        SessionServ.onChange(function () {
+            $scope.session = SessionServ.cur;
         });
 
         $http.get('/api/membres')

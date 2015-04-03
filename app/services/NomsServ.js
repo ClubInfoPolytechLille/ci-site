@@ -1,11 +1,11 @@
-var Noms = require('../models/noms');
+var NomsModl = require('../models/NomsModl');
 var LineTransform = require('node-line-reader').LineTransform;
 var fs = require('fs');
 
 var noms = {};
 
 noms.get = function (login, cb) {
-    Noms.findOne({
+    NomsModl.findOne({
         login: login
     }, function (err, nom) {
         if (err) {
@@ -28,7 +28,7 @@ noms.get = function (login, cb) {
                                 stream.close();
                                 cb(ex[4]);
                                 found = true;
-                                Noms.create({
+                                NomsModl.create({
                                     login: login,
                                     nom: ex[4]
                                 });

@@ -1,4 +1,4 @@
-angular.module('EncryptServ', []).service('EncryptService', ['$http',
+angular.module('EncryptServ', []).service('EncryptServ', ['$http',
     function ($http) {
         a = {
             encrypter: false,

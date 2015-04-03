@@ -1,13 +1,13 @@
-var Membre = require('../models/membre');
-var noms = require('../controllers/noms');
+var MembreModl = require('../models/MembreModl');
+var NomsServ = require('../services/NomsServ');
 var async = require('async');
 
 var membres = {};
 
 membres.list = function (cb) {
-    Membre.find({}).lean().exec(function (err, membres) {
+    MembreModl.find({}).lean().exec(function (err, membres) {
         addNom = function (membre, cbA) {
-            noms.get(membre.login, function (nom) {
+            NomsServ.get(membre.login, function (nom) {
                 if (nom) {
                     membre.nom = nom;
                 } else {
@@ -21,7 +21,7 @@ membres.list = function (cb) {
 };
 
 membres.add = function (data, cb) {
-    Membre.create({
+    MembreModl.create({
         login: data.login,
         role: data.role,
         section: data.section,
@@ -29,7 +29,7 @@ membres.add = function (data, cb) {
 };
 
 membres.remove = function (id, cb) {
-    Membre.remove({
+    MembreModl.remove({
         _id: id
     }, cb);
 };

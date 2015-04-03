@@ -1,12 +1,12 @@
-var Session = require('../models/session');
-var noms = require('../controllers/noms');
+var SessionModl = require('../models/SessionModl');
+var NomsServ = require('../services/NomsServ');
 
 var sessions = {};
 
 sessions.cur = false;
 
 sessions.addData = function (session, cb) {
-    noms.get(session.login, function (nom) {
+    NomsServ.get(session.login, function (nom) {
         if (typeof nom == 'string') {
             session.nom = nom;
         } else {
@@ -20,7 +20,7 @@ sessions.addData = function (session, cb) {
 
 sessions.find = function (id, cb) {
     _this = this;
-    Session.findById(id).lean().exec(function (err, session) {
+    SessionModl.findById(id).lean().exec(function (err, session) {
         if (typeof session == 'object') {
             _this.addData(session, function (session) {
                 cb(err, session);
@@ -36,7 +36,7 @@ sessions.valid = function (session) {
 };
 
 sessions.delete = function (id, cb) {
-    Session.remove({
+    SessionModl.remove({
         _id: id
     }, cb);
 };
@@ -74,14 +74,14 @@ sessions.use = function (id, cb) {
 };
 
 sessions.create = function (login, cb) {
-    Session.create({
+    SessionModl.create({
         login: login
     }, cb);
 };
 
 sessions.login = function (data, cb) {
     // DUMMY
-    noms.get(data.login, function (nom) {
+    NomsServ.get(data.login, function (nom) {
         if (nom === false) {
             cb(null, false);
         } else {

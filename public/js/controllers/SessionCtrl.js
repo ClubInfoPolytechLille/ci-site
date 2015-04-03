@@ -1,11 +1,11 @@
-angular.module('SessionsCtrl', []).controller('SessionController', ['$scope', 'SessionService',
-    function ($scope, SessionService) {
-        $scope.session = SessionService.cur;
+angular.module('SessionsCtrl', []).controller('SessionCtrl', ['$scope', 'SessionServ',
+    function ($scope, SessionServ) {
+        $scope.session = SessionServ.cur;
         $scope.disconnect = function () {
-            SessionService.disconnect();
+            SessionServ.disconnect();
         };
-        SessionService.onChange(function () {
-                $scope.session = SessionService.cur;
+        SessionServ.onChange(function () {
+                $scope.session = SessionServ.cur;
             });
             // $scope.$on("$destroy", function () {
             //     // TODO

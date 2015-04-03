@@ -1,11 +1,11 @@
 var ursa = require('ursa');
 var fs = require('fs');
 
-var decrypt = {};
+var DecryptServ = {};
 
-decrypt.decrypter = false;
+DecryptServ.decrypter = false;
 
-decrypt.whenOk = function (cb) {
+DecryptServ.whenOk = function (cb) {
     if (this.encrypter) {
         cb();
     } else {
@@ -13,7 +13,7 @@ decrypt.whenOk = function (cb) {
     }
 };
 
-decrypt.prepare = function (cb) {
+DecryptServ.prepare = function (cb) {
     fs.readFile('config/ci_com.pem', function (err, data) {
         if (err) {
             throw err;
@@ -23,14 +23,14 @@ decrypt.prepare = function (cb) {
     });
 };
 
-decrypt.preload = function (cb) {
+DecryptServ.preload = function (cb) {
     this.whenOk(cb);
 };
 
-decrypt.decrypt = function (string, cb) {
+DecryptServ.decrypt = function (string, cb) {
     this.whenOk(function () {
         cb(this.decrypter.decrypt(string, 'base64', 'utf8', ursa.RSA_PKCS1_PADDING));
     });
 };
 
-module.exports = decrypt;
+module.exports = DecryptServ;

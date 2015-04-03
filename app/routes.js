@@ -1,5 +1,5 @@
 var path = require('path');
-var api = require('./routes/api');
+var api = require('./routes/ApiRtes');
 
 module.exports = function (app) {
 
