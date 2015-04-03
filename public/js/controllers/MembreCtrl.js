@@ -1,4 +1,4 @@
-angular.module('MembreCtrl', []).controller('MembreCtrl', ['$scope', '$http', 'SessionServ', 'NotifyServ',
+angular.module('MembreCtrl', ['SessionsServ', 'NotifyServ']).controller('MembreCtrl', ['$scope', '$http', 'SessionServ', 'NotifyServ',
     function ($scope, $http, SessionServ, NotifyServ) {
         $scope.formData = {};
 

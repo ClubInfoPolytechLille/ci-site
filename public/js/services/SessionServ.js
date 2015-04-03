@@ -1,4 +1,4 @@
-angular.module('SessionsServ', []).service('SessionServ', ['$http', 'EncryptServ', 'NotifyServ',
+angular.module('SessionsServ', ['NotifyServ', 'EncryptServ']).service('SessionServ', ['$http', 'EncryptServ', 'NotifyServ',
     function ($http, EncryptServ, NotifyServ) {
         a = {
             cur: false,

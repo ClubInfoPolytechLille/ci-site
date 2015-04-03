@@ -1,1 +1,19 @@
-angular.module('ciApp', ['ngRoute', 'appRoutes', 'angular-ladda', 'NotifyServ', 'EncryptServ', 'SessionsServ', 'SessionsCtrl', 'ConnectCtrl', 'MembreCtrl']);
+angular.module('ciApp', ['ngRoute', 'SessionsCtrl', 'ConnectCtrl', 'MembreCtrl']).config(['$routeProvider', '$locationProvider',
+    function ($routeProvider, $locationProvider) {
+        $routeProvider
+            .when('/', {
+                templateUrl: 'views/home.html'
+            })
+            .when('/membres', {
+                templateUrl: 'views/membres.html',
+                controller: 'MembreCtrl'
+            })
+            .when('/connect', {
+                templateUrl: 'views/connect.html',
+                controller: 'ConnectCtrl'
+            });
+
+        $locationProvider.html5Mode(true);
+
+    }
+]);

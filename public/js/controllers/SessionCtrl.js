@@ -1,4 +1,4 @@
-angular.module('SessionsCtrl', []).controller('SessionCtrl', ['$scope', 'SessionServ',
+angular.module('SessionsCtrl', ['SessionsServ']).controller('SessionCtrl', ['$scope', 'SessionServ',
     function ($scope, SessionServ) {
         $scope.session = SessionServ.cur;
         $scope.disconnect = function () {
