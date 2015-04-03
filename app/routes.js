@@ -1,3 +1,4 @@
+var path = require('path');
 var api = require('./routes/api');
 
 module.exports = function (app) {
@@ -5,7 +6,7 @@ module.exports = function (app) {
     app.use('/api/', api);
 
     app.get('*', function (req, res) {
-        res.sendfile('./public/views/index.html');
+        res.sendFile('public/views/index.html', { root: path.normalize(__dirname + '/..') });
     });
 
 };
