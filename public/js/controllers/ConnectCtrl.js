@@ -7,8 +7,11 @@ angular.module('ConnectCtrl', ['SessionsServ', 'EncryptServ', 'angular-ladda']).
         $scope.connect = {
             connect: function () {
                 $scope.connecting = true;
-                SessionServ.connect($scope.connect.login, $scope.connect.pass, function() {
+                SessionServ.connect($scope.connect.login, $scope.connect.pass, function(err) {
                     $scope.connecting = false;
+                    if (!err) {
+                        window.history.back();
+                    }
                 });
             }
         };
