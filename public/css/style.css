@@ -3,39 +3,49 @@ html {
 }
 
 body {
-    padding-top: 50px;
+    padding-top: 70px;
 }
 
 [data-notify="title"] {
     display: block;
 }
 
-#ngViewAnimationContainer {
+.ng-enter {
+    -webkit-animation: fadeInLeft 0.5s;
+    animation: fadeInLeft 0.5s;
+}
+
+.ng-leave {
+    -webkit-animation: fadeOutLeft 0.5s;
+    animation: fadeOutLeft 0.5s;
+}
+
+body > .container {
     position: relative;
 }
 
-[ng-view].ng-enter {
+body > .container > .ng-enter {
     position: absolute;
     -webkit-animation: zoomIn 0.5s;
     animation: zoomIn 0.5s;
 }
 
-[ng-view].ng-leave {
+body > .container > .ng-leave {
     position: absolute;
     -webkit-animation: fadeOutDown 0.5s;
     animation: fadeOutDown 0.5s;
 }
 
-#membre-list {
+table {
     width: 90%;
 }
 
-#membre-list .ng-enter {
+table .ng-enter {
     -webkit-animation: fadeInLeft 0.5s;
     animation: fadeInLeft 0.5s;
 }
 
-#membre-list .ng-leave {
+table .ng-leave {
     -webkit-animation: fadeOutLeft 0.5s;
     animation: fadeOutLeft 0.5s;
 }

@@ -1,4 +1,4 @@
-angular.module('ciApp', ['ngRoute', 'ngAnimate', 'SessionsCtrl', 'ConnectCtrl', 'MembreCtrl']).config(['$routeProvider', '$locationProvider',
+angular.module('ciApp', ['ngAnimate', 'ngRoute', 'SessionsCtrl', 'ConnectCtrl', 'MembreCtrl']).config(['$routeProvider', '$locationProvider',
     function ($routeProvider, $locationProvider) {
         $routeProvider
             .when('/', {

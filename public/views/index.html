@@ -14,7 +14,6 @@
     <script src="libs/angular/angular.min.js"></script>
     <script src="libs/angular-route/angular-route.min.js"></script>
     <script src="/libs/angular-animate/angular-animate.js"></script>
-    <script src="libs/angular-bootstrap/ui-bootstrap.min.js"></script>
     <script src="libs/jsencrypt/bin/jsencrypt.min.js"></script>
     <script src="libs/remarkable-bootstrap-notify/bootstrap-notify.min.js"></script>
     <script src="libs/ladda/js/spin.js"></script>
@@ -30,17 +29,23 @@
 </head>
 
 <body ng-app="ciApp">
-    <div class="container">
-        <nav class="navbar navbar-default">
+        <nav class="navbar navbar-default navbar-fixed-top" ng-controller="SessionCtrl">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="/">Club Info</a>
+                    <button type="button" class="navbar-toggle" ng-init="isCollapsed = true" ng-click="isCollapsed = !isCollapsed">
+                        <span class="sr-only">Ouvrir le menu</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
                 </div>
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <div class="navbar-collapse" ng-class="{collapse: isCollapsed}">
                     <ul class="nav navbar-nav">
                         <li><a href="/membres">Membres</a></li>
+                        <li ng-show="session"><a href="/forum">Forum</a></li>
                     </ul>
-                    <ul class="nav navbar-nav navbar-right" ng-controller="SessionCtrl">
+                    <ul class="nav navbar-nav navbar-right" id="SessionIndc">
                         <li>
                             <a ng-hide="session" href="/connect">Se connecter</a>
                             <a ng-show="session" href="#" ng-click="disconnect()">{{ session.nom }} <span class="glyphicon glyphicon-off"></span></a>
@@ -49,10 +54,9 @@
                 </div>
             </div>
         </nav>
-        <div id="ngViewAnimationContainer">
+        <div class="container" id="ngViewAnimationContainer">
             <div ng-view></div>
         </div>
-    </div>
 </body>
 
 </html>

@@ -1,5 +1,6 @@
 angular.module('SessionsCtrl', ['SessionsServ']).controller('SessionCtrl', ['$scope', 'SessionServ',
     function ($scope, SessionServ) {
+        $scope.isCollapsed = false;
         $scope.session = SessionServ.cur;
         $scope.disconnect = function () {
             SessionServ.disconnect();
