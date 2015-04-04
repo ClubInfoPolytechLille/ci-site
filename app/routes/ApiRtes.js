@@ -75,11 +75,8 @@ api.post('/membres', function (req, res) { // Ajout d'un membre
         MembresServ.add(req.body, function (err, membre) {
             if (err)
                 res.send(err);
-            MembresServ.list(function (err, membres) {
-                if (err)
-                    res.send(err);
-                res.json(membres);
-            });
+            else
+                res.json(membre);
         });
     });
 });
@@ -89,11 +86,8 @@ api.delete('/membres/:membre_id', function (req, res) { // Supression d'un membr
         MembresServ.remove(req.params.membre_id, function (err, membre) {
             if (err)
                 res.send(err);
-            MembresServ.list(function (err, membres) {
-                if (err)
-                    res.send(err);
-                res.json(membres);
-            });
+            else
+                res.json(null);
         });
     });
 });

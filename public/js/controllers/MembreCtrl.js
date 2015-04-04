@@ -18,9 +18,9 @@ angular.module('MembreCtrl', ['SessionsServ', 'NotifyServ']).controller('MembreC
         $scope.createMembre = function () {
             var not = NotifyServ.promise("Ajout du membre...");
             $http.post('/api/membres', $scope.formData)
-                .success(function (data) {
+                .success(function (membre) {
                     $scope.formData = {};
-                    $scope.membres = data;
+                    $scope.membres.push(membre);
                     not.success("Membre ajouté");
                 })
                 .error(function (data) {
@@ -28,11 +28,11 @@ angular.module('MembreCtrl', ['SessionsServ', 'NotifyServ']).controller('MembreC
                 });
         };
 
-        $scope.deleteMembre = function (id) {
+        $scope.deleteMembre = function (index) {
             var not = NotifyServ.promise("Suppression du membre...");
-            $http.delete('/api/membres/' + id)
-                .success(function (data) {
-                    $scope.membres = data;
+            $http.delete('/api/membres/' + $scope.membres[index]._id)
+                .success(function (membre) {
+                    $scope.membres.splice(index, 1);
                     not.success("Membre supprimé");
                 })
                 .error(function (data) {
