@@ -104,6 +104,15 @@ api.get('/convs', function (req, res) { // Liste des convs
     });
 });
 
+api.get('/convs/:conv_id', function (req, res) { // Une conv
+    ConvsServ.get(req.params.conv_id, function (err, conv) {
+        if (err)
+            res.send(err);
+        else
+            res.json(conv);
+    });
+});
+
 api.post('/convs', function (req, res) { // Ajout d'un conv
     ifPermission(req, res, 'canAddConv', function () {
         ConvsServ.add(req.body, function (err, conv) {

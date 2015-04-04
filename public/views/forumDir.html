@@ -6,7 +6,9 @@
     </ol>
     <div class="panel panel-default" ng-repeat="conv in convs">
         <div class="panel-heading">
-            <h3 class="panel-title">{{ conv.titre }}</h3>
+            <a href="/forum/conv/{{ conv._id }}">
+                <h3 class="panel-title">{{ conv.titre }}</h3>
+            </a>
         </div>
         <div class="panel-body">
             <strong>Date : </strong>{{ conv.date }}

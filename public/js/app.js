@@ -1,4 +1,4 @@
-angular.module('ciApp', ['ngAnimate', 'ngRoute', 'ConnectCtrl', 'MembreCtrl', 'ForumDirCtrl', 'SessionsCtrl']).config(['$routeProvider', '$locationProvider',
+angular.module('ciApp', ['ngAnimate', 'ngRoute', 'ConnectCtrl', 'MembreCtrl', 'ForumDirCtrl', 'ForumConvCtrl', 'SessionsCtrl']).config(['$routeProvider', '$locationProvider',
     function ($routeProvider, $locationProvider) {
         $routeProvider
             .when('/', {
@@ -9,8 +9,15 @@ angular.module('ciApp', ['ngAnimate', 'ngRoute', 'ConnectCtrl', 'MembreCtrl', 'F
                 controller: 'MembreCtrl'
             })
             .when('/forum', {
+                redirectTo: 'forum/dir/0'
+            })
+            .when('/forum/dir/:dir_id', {
                 templateUrl: 'views/forumDir.html',
                 controller: 'ForumDirCtrl'
+            })
+            .when('/forum/conv/:conv_id', {
+                templateUrl: 'views/forumConv.html',
+                controller: 'ForumConvCtrl'
             })
             .when('/connect', {
                 templateUrl: 'views/connect.html',

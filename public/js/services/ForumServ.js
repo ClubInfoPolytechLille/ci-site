@@ -1,6 +1,16 @@
 angular.module('ForumServ', ['NotifyServ']).service('ForumServ', ['$http', 'NotifyServ',
     function ($http, NotifyServ) {
         a = {
+            getConv: function (id, cb) {
+                $http.get('/api/convs/' + id)
+                    .success(function (data) {
+                        cb(null, data);
+                    })
+                    .error(function (data) {
+                        NotifyServ.error("Impossible d'obtenir la conv", data);
+                    });
+            },
+
             getConvs: function (cb) {
                 // TODO Dirs
                 $http.get('/api/convs')

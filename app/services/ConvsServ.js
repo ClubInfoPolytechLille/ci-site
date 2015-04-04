@@ -4,7 +4,7 @@ var async = require('async');
 
 var ConvsServ = {};
 
-ConvsServ.addData = function (Conv, cb) {
+ConvsServ.addData = function (conv, cb) {
     // NomsServ.get(Conv.login, function (nom) {
     //     if (nom) {
     //         Conv.nom = nom;
@@ -15,15 +15,15 @@ ConvsServ.addData = function (Conv, cb) {
     // });
     // TODO Démarré par
     // TODO Dernier message
-    cb(null, Conv);
+    cb(null, conv);
 };
 
 ConvsServ.get = function(id, cb) {
-    ConvModl.findById(id).lean().exec(function (err, Conv) {
+    ConvModl.findById(id).lean().exec(function (err, conv) {
         if (err)
             cb(err);
         else
-            ConvsServ.addData(Conv, cb);
+            ConvsServ.addData(conv, cb);
     });
 };
 

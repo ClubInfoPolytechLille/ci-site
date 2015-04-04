@@ -16,6 +16,7 @@ angular.module('ForumDirCtrl', ['SessionsServ', 'ForumServ', 'NotifyServ']).cont
         $scope.createConv = function () {
             ForumServ.createConv($scope.formData, function(err, conv) {
                 if (!err)
+                    $scope.formData = {};
                     $scope.convs.push(conv);
             });
         };
