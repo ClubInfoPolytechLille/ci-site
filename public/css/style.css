@@ -10,6 +10,6 @@ body {
     width: 90%;
 }
 
-[data-notify="progressbar"] {
-    display: none;
+[data-notify="title"] {
+    display: block;
 }

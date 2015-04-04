@@ -16,25 +16,27 @@ angular.module('MembreCtrl', ['SessionsServ', 'NotifyServ']).controller('MembreC
             });
 
         $scope.createMembre = function () {
+            var not = NotifyServ.promise("Ajout du membre...");
             $http.post('/api/membres', $scope.formData)
                 .success(function (data) {
                     $scope.formData = {};
                     $scope.membres = data;
-                    NotifyServ.success("Membre ajouté");
+                    not.success("Membre ajouté");
                 })
                 .error(function (data) {
-                    NotifyServ.error("Impossible d'ajouter le membre", data);
+                    not.error("Impossible d'ajouter le membre");
                 });
         };
 
         $scope.deleteMembre = function (id) {
+            var not = NotifyServ.promise("Suppression du membre...");
             $http.delete('/api/membres/' + id)
                 .success(function (data) {
                     $scope.membres = data;
-                    NotifyServ.success("Membre supprimé.");
+                    not.success("Membre supprimé");
                 })
                 .error(function (data) {
-                    NotifyServ.error("Impossible de supprimer le membre", data);
+                    not.error("Impossible de supprimer le membre", data);
                 });
         };
 

@@ -15,7 +15,7 @@ angular.module('SessionsServ', ['NotifyServ', 'EncryptServ']).service('SessionSe
                 if (typeof data === 'object') {
                     this.cur = data;
                 } else if (data === 'expired') {
-                    NotifyServ.warn("Votre session a expiré");
+                    NotifyServ.warn("Session expirée");
                 } else {
                     this.cur = false;
                 }
@@ -37,6 +37,7 @@ angular.module('SessionsServ', ['NotifyServ', 'EncryptServ']).service('SessionSe
             },
             connect: function (login, pass, cb) {
                 _this = this;
+                var not = NotifyServ.promise("Connexion...");
                 data = JSON.stringify({
                     login: login,
                     pass: pass
@@ -45,24 +46,29 @@ angular.module('SessionsServ', ['NotifyServ', 'EncryptServ']).service('SessionSe
                     $http.post('/api/session', [dataCrypt]).success(function (body) {
                         _this.updateSessionInfos(body);
                         if (_this.cur) {
-                            NotifyServ.info("Connecté en tant que <strong>" + _this.cur.nom + "</strong>");
+                            not.success("Connecté en tant que <strong>" + _this.cur.nom + "</strong>");
                             if (cb)
                                 cb(null);
                         } else {
                             if (body === 'invalid') {
-                                NotifyServ.warn("Identifiants invalides");
+                                not.warn("Identifiants invalides");
                             }
                             if (cb)
                                 cb(body);
                         }
+                    }).error(function (body) {
+                        not.error("Impossible de se connecter", body);
                     });
                 });
             },
             disconnect: function () {
                 _this = this;
+                var not = NotifyServ.promise("Déconnexion...");
                 $http.delete('/api/session').success(function () {
                     _this.updateSessionInfos(false);
-                    NotifyServ.info("Déconnecté");
+                    not.success("Déconnecté");
+                }).error(function(body) {
+                    not.error("Impossible de se déconnecter", body);
                 });
             }
         };
