@@ -15,6 +15,8 @@ sessions.addData = function (session, cb) {
         }
         session.canAddMembre = session.login == 'gbontoux';
         session.canDelMembre = session.login == 'gbontoux';
+        session.canAddConv = session.login == 'gbontoux';
+        session.canDelConv = session.login == 'gbontoux';
         cb(session);
     });
 };

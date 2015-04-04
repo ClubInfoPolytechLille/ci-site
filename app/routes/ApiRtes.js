@@ -1,6 +1,7 @@
 var MembresServ = require('../services/MembresServ');
 var SessionsServ = require('../services/SessionsServ');
 var DecryptServ = require('../services/DecryptServ');
+var ConvsServ = require('../services/ConvsServ');
 var express = require('express');
 
 var api = express();
@@ -84,6 +85,39 @@ api.post('/membres', function (req, res) { // Ajout d'un membre
 api.delete('/membres/:membre_id', function (req, res) { // Supression d'un membre
     ifPermission(req, res, 'canDelMembre', function () {
         MembresServ.remove(req.params.membre_id, function (err, membre) {
+            if (err)
+                res.send(err);
+            else
+                res.json(null);
+        });
+    });
+});
+
+
+// Conversations
+api.get('/convs', function (req, res) { // Liste des convs
+    ConvsServ.list(function (err, convs) {
+        if (err)
+            res.send(err);
+        else
+            res.json(convs);
+    });
+});
+
+api.post('/convs', function (req, res) { // Ajout d'un conv
+    ifPermission(req, res, 'canAddConv', function () {
+        ConvsServ.add(req.body, function (err, conv) {
+            if (err)
+                res.send(err);
+            else
+                res.json(conv);
+        });
+    });
+});
+
+api.delete('/convs/:conv_id', function (req, res) { // Supression d'un conv
+    ifPermission(req, res, 'canDelConv', function () {
+        ConvsServ.remove(req.params.conv_id, function (err, conv) {
             if (err)
                 res.send(err);
             else

@@ -1,4 +1,4 @@
-angular.module('ciApp', ['ngAnimate', 'ngRoute', 'SessionsCtrl', 'ConnectCtrl', 'MembreCtrl']).config(['$routeProvider', '$locationProvider',
+angular.module('ciApp', ['ngAnimate', 'ngRoute', 'ConnectCtrl', 'MembreCtrl', 'ForumDirCtrl', 'SessionsCtrl']).config(['$routeProvider', '$locationProvider',
     function ($routeProvider, $locationProvider) {
         $routeProvider
             .when('/', {
@@ -7,6 +7,10 @@ angular.module('ciApp', ['ngAnimate', 'ngRoute', 'SessionsCtrl', 'ConnectCtrl', 
             .when('/membres', {
                 templateUrl: 'views/membres.html',
                 controller: 'MembreCtrl'
+            })
+            .when('/forum', {
+                templateUrl: 'views/forumDir.html',
+                controller: 'ForumDirCtrl'
             })
             .when('/connect', {
                 templateUrl: 'views/connect.html',
