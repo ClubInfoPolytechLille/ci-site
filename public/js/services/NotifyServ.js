@@ -38,6 +38,9 @@ angular.module('NotifyServ', []).service('NotifyServ', [
                 console.warn(message);
             },
             error: function (context, error) {
+                if (!error) {
+                    error = '';
+                }
                 this.notify({
                     title: context,
                     message: error
@@ -80,6 +83,9 @@ angular.module('NotifyServ', []).service('NotifyServ', [
                         });
                     },
                     error: function (context, error) {
+                        if (!error) {
+                            error = '';
+                        }
                         commands = {
                             title: context,
                             message: error,
