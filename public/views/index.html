@@ -13,6 +13,7 @@
     <script src="libs/jquery/dist/jquery.min.js"></script>
     <script src="libs/angular/angular.min.js"></script>
     <script src="libs/angular-route/angular-route.min.js"></script>
+    <script src="/libs/angular-animate/angular-animate.js"></script>
     <script src="libs/angular-bootstrap/ui-bootstrap.min.js"></script>
     <script src="libs/jsencrypt/bin/jsencrypt.min.js"></script>
     <script src="libs/remarkable-bootstrap-notify/bootstrap-notify.min.js"></script>
@@ -48,7 +49,9 @@
                 </div>
             </div>
         </nav>
-        <div ng-view></div>
+        <div id="ngViewAnimationContainer">
+            <div ng-view></div>
+        </div>
     </div>
 </body>
 

@@ -6,10 +6,26 @@ body {
     padding-top: 50px;
 }
 
-#membre-list {
-    width: 90%;
-}
-
 [data-notify="title"] {
     display: block;
+}
+
+#ngViewAnimationContainer {
+    position: relative;
+}
+
+[ng-view].ng-enter {
+    position: absolute;
+    -webkit-animation: zoomIn 0.5s;
+    animation: zoomIn 0.5s;
+}
+
+[ng-view].ng-leave {
+    position: absolute;
+    -webkit-animation: fadeOutDown 0.5s;
+    animation: fadeOutDown 0.5s;
+}
+
+#membre-list {
+    width: 90%;
 }
