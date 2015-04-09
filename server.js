@@ -9,7 +9,8 @@ var cookieParser = require('cookie-parser');
 
 // Application ================================================================
 
-var port = process.env.PORT || 8080;
+var config = require('./config/config.js');
+var port = process.env.PORT || config.port;
 
 // Connection à la BDD
 var db = require('./config/db');
