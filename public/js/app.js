@@ -22,6 +22,9 @@ angular.module('ciApp', ['ngAnimate', 'ngRoute', 'ConnectCtrl', 'MembreCtrl', 'F
             .when('/connect', {
                 templateUrl: 'views/connect.html',
                 controller: 'ConnectCtrl'
+            })
+            .otherwise({
+                redirectTo: '/'
             });
         $locationProvider.html5Mode(true);
     }

@@ -229,7 +229,12 @@ api.delete('/messs/:mess_id', reqPerm('canDelMess'), function (req, res) { // Su
     });
 });
 
-// TODO 404
-// TODO 418
+api.all('/coffee', function (req, res) {
+    res.status(418).end();
+});
+
+api.all('*', function (req, res) {
+    res.status(405).end();
+});
 
 module.exports = api;
