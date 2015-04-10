@@ -1,14 +1,12 @@
 // Modules ====================================================================
 var express = require('express');
-var app = express();
 var mongoose = require('mongoose');
-var morgan = require('morgan');
 var bodyParser = require('body-parser');
-var methodOverride = require('method-override');
 var cookieParser = require('cookie-parser');
 
 // Application ================================================================
 
+var app = express();
 var config = require('./config/config.js');
 var port = process.env.PORT || config.port;
 
@@ -18,13 +16,9 @@ mongoose.connect(db.url);
 
 // Tricks
 app.use(bodyParser.json());
-app.use(bodyParser.json({
-    type: 'application/vnd.api+json'
-}));
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-app.use(methodOverride('X-HTTP-Method-Override'));
 
 // Cookie-parser
 app.use(cookieParser());
