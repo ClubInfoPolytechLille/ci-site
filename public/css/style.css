@@ -10,13 +10,23 @@ body {
     display: block;
 }
 
-.ng-enter {
+[ng-repeat].ng-enter {
     -webkit-animation: fadeInLeft 0.5s;
     animation: fadeInLeft 0.5s;
 }
 
-.ng-leave {
+[ng-repeat].ng-leave {
     -webkit-animation: fadeOutLeft 0.5s;
+    animation: fadeOutLeft 0.5s;
+}
+
+[ng-if].ng-enter {
+    -webkit-animation: zoomIn 0.5s;
+    animation: fadeInLeft 0.5s;
+}
+
+[ng-if].ng-leave {
+    -webkit-animation: zoomOut 0.5s;
     animation: fadeOutLeft 0.5s;
 }
 
