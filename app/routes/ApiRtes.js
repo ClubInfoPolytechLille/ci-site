@@ -10,12 +10,12 @@ var api = express();
 // Authentication
 reqAuth = function () {
     return function (req, res, next) {
-        SessionsServ.use(req.cookies.session, function (err) {
+        SessionsServ.use(req.cookies.session, function (err, session) {
             if (err) {
                 res.status(500).send(err);
             } else {
-                if (SessionsServ.cur) {
-                    req.session = SessionsServ.cur;
+                if (session) {
+                    req.session = session;
                     next();
                 } else {
                     res.status(401).end();
@@ -71,11 +71,11 @@ assert = function (test) {
 // Sessions
 api.get('/session', function (req, res) { // Informations sur la session
     if (req.cookies && req.cookies.session) {
-        SessionsServ.use(req.cookies.session, function (err) {
+        SessionsServ.use(req.cookies.session, function (err, session) {
             if (err) {
-                res.send(err);
+                res.status(500).send(err);
             } else {
-                res.send(SessionsServ.cur);
+                res.send(session);
             }
         });
         // TODO si pas bon : res.clearCookie('session')
@@ -86,12 +86,12 @@ api.get('/session', function (req, res) { // Informations sur la session
 
 api.post('/session', function (req, res) { // Se connecter
     DecryptServ.decrypt(req.body[0], function (data) {
-        SessionsServ.open(JSON.parse(data), function (err) {
+        SessionsServ.open(JSON.parse(data), function (err, session) {
             if (err) {
-                res.send(err);
+                res.status(500).send(err);
             } else {
-                res.cookie('session', SessionsServ.cur._id);
-                res.send(SessionsServ.cur);
+                res.cookie('session', session._id);
+                res.send(session);
             }
         });
     });
@@ -113,7 +113,7 @@ api.delete('/session', function (req, res) { // Se déconnecter
 api.get('/membres', function (req, res) { // Liste des membres
     MembresServ.list(function (err, membres) {
         if (err)
-            res.send(err);
+            res.status(500).send(err);
         else
             res.json(membres);
     });
@@ -124,7 +124,7 @@ api.post('/membres', assert(function (req, res, cb) {
 }), reqPerm('canAddMembre'), function (req, res) { // Ajout d'un membre
     MembresServ.add(req.body, function (err, membre) {
         if (err)
-            res.send(err);
+            res.status(500).send(err);
         else
             res.json(membre);
     });
@@ -133,7 +133,7 @@ api.post('/membres', assert(function (req, res, cb) {
 api.delete('/membres/:membre_id', reqPerm('canDelMembre'), function (req, res) { // Supression d'un membre
     MembresServ.remove(req.params.membre_id, function (err, membre) {
         if (err)
-            res.send(err);
+            res.status(500).send(err);
         else
             res.json(null);
     });
@@ -144,7 +144,7 @@ api.delete('/membres/:membre_id', reqPerm('canDelMembre'), function (req, res) {
 api.get('/convs', function (req, res) { // Liste des convs
     ConvsServ.list(function (err, convs) {
         if (err)
-            res.send(err);
+            res.status(500).send(err);
         else
             res.json(convs);
     });
@@ -153,7 +153,7 @@ api.get('/convs', function (req, res) { // Liste des convs
 api.get('/convs/:conv_id', function (req, res) { // Une conv
     ConvsServ.get(req.params.conv_id, function (err, conv) {
         if (err)
-            res.send(err);
+            res.status(500).send(err);
         else
             res.json(conv);
     });
@@ -162,7 +162,7 @@ api.get('/convs/:conv_id', function (req, res) { // Une conv
 api.post('/convs', reqPerm('canAddConv'), function (req, res) { // Ajout d'un conv
     ConvsServ.add(req.body, function (err, conv) {
         if (err)
-            res.send(err);
+            res.status(500).send(err);
         else
             res.json(conv);
     });
@@ -171,46 +171,46 @@ api.post('/convs', reqPerm('canAddConv'), function (req, res) { // Ajout d'un co
 api.delete('/convs/:conv_id', reqPerm('canDelConv'), function (req, res) { // Supression d'un conv
     ConvsServ.remove(req.params.conv_id, function (err, conv) {
         if (err)
-            res.send(err);
+            res.status(500).send(err);
         else
             res.json(null);
     });
 });
 
 // Messages
-api.get('/messs/:conv_id', function (req, res) { // Liste des messs
+api.get('/messs/:conv_id', reqAuth(), function (req, res) { // Liste des messs
     MessServ.list(req.params.conv_id, function (err, messs) {
         if (err)
-            res.send(err);
+            res.status(500).send(err);
         else
             res.json(messs);
     });
 });
 
-api.get('/messs/:mess_id', function (req, res) { // Une mess
+api.get('/messs/:mess_id', reqAuth(), function (req, res) { // Une mess
     MessServ.get(req.params.mess_id, function (err, mess) {
         if (err)
-            res.send(err);
+            res.status(500).send(err);
         else
             res.json(mess);
     });
 });
 
-api.post('/messs', reqAuth(), function (req, res) { // Ajout d'un mess
+api.post('/messs', reqPerm('canAddMess'), function (req, res) { // Ajout d'un mess
     data = req.body;
     data.login = req.session.login;
     MessServ.add(data, function (err, mess) {
         if (err)
-            res.send(err);
+            res.status(500).send(err);
         else
             res.json(mess);
     });
 });
 
-api.delete('/messs/:mess_id', reqAuth(), function (req, res) { // Supression d'un mess
+api.delete('/messs/:mess_id', reqPerm('canDelMess'), function (req, res) { // Supression d'un mess
     MessServ.remove(req.params.mess_id, function (err, mess) {
         if (err)
-            res.send(err);
+            res.status(500).send(err);
         else
             res.json(null);
     });

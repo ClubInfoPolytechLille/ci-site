@@ -58,6 +58,7 @@ angular.module('SessionsServ', ['NotifyServ', 'EncryptServ']).service('SessionSe
                         }
                     }).error(function (body) {
                         not.error("Impossible de se connecter", body);
+                        cb(body);
                     });
                 });
             },
@@ -67,7 +68,7 @@ angular.module('SessionsServ', ['NotifyServ', 'EncryptServ']).service('SessionSe
                 $http.delete('/api/session').success(function () {
                     _this.updateSessionInfos(false);
                     not.success("Déconnecté");
-                }).error(function(body) {
+                }).error(function (body) {
                     not.error("Impossible de se déconnecter", body);
                 });
             }

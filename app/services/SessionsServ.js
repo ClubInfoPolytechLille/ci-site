@@ -75,8 +75,7 @@ sessions.use = function (id, cb) {
         if (err) {
             cb(err);
         } else {
-            _this.cur = session; // TODO Get rid of _this.cur
-            cb(null);
+            cb(null, session);
         }
     });
 };
@@ -95,12 +94,12 @@ sessions.open = function (data, cb) {
     _this = this;
     _this.login(data, function (err, res) {
         if (err) {
-            cb('error');
+            cb(err);
         } else {
             if (res) {
                 _this.create(data.login, function (err, session) {
                     if (err) {
-                        cb('error');
+                        cb(err);
                     } else {
                         _this.use(session._id, cb);
                     }
