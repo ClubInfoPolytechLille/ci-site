@@ -23,8 +23,6 @@ angular.module('ciApp', ['ngAnimate', 'ngRoute', 'ConnectCtrl', 'MembreCtrl', 'F
                 templateUrl: 'views/connect.html',
                 controller: 'ConnectCtrl'
             });
-
         $locationProvider.html5Mode(true);
-
     }
 ]);

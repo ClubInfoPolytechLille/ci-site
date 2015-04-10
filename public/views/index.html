@@ -20,9 +20,9 @@
     <script src="libs/ladda/js/ladda.js"></script>
     <script src="libs/angular-ladda/dist/angular-ladda.min.js"></script>
     <script src="js/services/NotifyServ.js"></script>
+    <script src="js/services/ApiServ.js"></script>
     <script src="js/services/EncryptServ.js"></script>
     <script src="js/services/SessionServ.js"></script>
-    <script src="js/services/ForumServ.js"></script>
     <script src="js/controllers/SessionCtrl.js"></script>
     <script src="js/controllers/ConnectCtrl.js"></script>
     <script src="js/controllers/MembreCtrl.js"></script>
@@ -32,34 +32,34 @@
 </head>
 
 <body ng-app="ciApp">
-        <nav class="navbar navbar-default navbar-fixed-top" ng-controller="SessionCtrl">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="/">Club Info</a>
-                    <button type="button" class="navbar-toggle" ng-init="isCollapsed = true" ng-click="isCollapsed = !isCollapsed">
-                        <span class="sr-only">Ouvrir le menu</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                </div>
-                <div class="navbar-collapse" ng-class="{collapse: isCollapsed}">
-                    <ul class="nav navbar-nav">
-                        <li><a href="/membres">Membres</a></li>
-                        <li ng-show="session"><a href="/forum">Forum</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right" id="SessionIndc">
-                        <li>
-                            <a ng-hide="session" href="/connect">Se connecter</a>
-                            <a ng-show="session" href="#" ng-click="disconnect()">{{ session.nom }} <span class="glyphicon glyphicon-off"></span></a>
-                        </li>
-                    </ul>
-                </div>
+    <nav class="navbar navbar-default navbar-fixed-top" ng-controller="SessionCtrl">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">Club Info</a>
+                <button type="button" class="navbar-toggle" ng-init="isCollapsed = true" ng-click="isCollapsed = !isCollapsed">
+                    <span class="sr-only">Ouvrir le menu</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
             </div>
-        </nav>
-        <div class="container" id="ngViewAnimationContainer">
-            <div ng-view></div>
+            <div class="navbar-collapse" ng-class="{collapse: isCollapsed}">
+                <ul class="nav navbar-nav">
+                    <li><a href="/membres">Membres</a></li>
+                    <li ng-show="session"><a href="/forum">Forum</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right" id="SessionIndc">
+                    <li>
+                        <a ng-hide="session" href="/connect">Se connecter</a>
+                        <a ng-show="session" href="#" ng-click="disconnect()">{{ session.nom }} <span class="glyphicon glyphicon-off"></span></a>
+                    </li>
+                </ul>
+            </div>
         </div>
+    </nav>
+    <div class="container" id="ngViewAnimationContainer">
+        <div ng-view></div>
+    </div>
 </body>
 
 </html>

@@ -1,5 +1,5 @@
-angular.module('ForumConvCtrl', ['SessionsServ', 'ForumServ', 'NotifyServ']).controller('ForumConvCtrl', ['$scope', '$routeParams', 'SessionServ', 'ForumServ', 'NotifyServ',
-    function ($scope, $routeParams, SessionServ, ForumServ, NotifyServ) {
+angular.module('ForumConvCtrl', ['SessionsServ', 'ApiServ']).controller('ForumConvCtrl', ['$scope', '$routeParams', 'SessionServ', 'ApiServ',
+    function ($scope, $routeParams, SessionServ, ApiServ) {
         $scope.messs = [];
         $scope.conv = {};
         $scope.formData = {};
@@ -8,20 +8,20 @@ angular.module('ForumConvCtrl', ['SessionsServ', 'ForumServ', 'NotifyServ']).con
         SessionServ.onChange(function () {
             $scope.session = SessionServ.cur;
         });
-        ForumServ.getConv($routeParams.conv_id, function (err, conv) {
-            if (!err)
+        ApiServ("récupération de la conversation", 'get', 'convs', $routeParams.conv_id, function (err, conv) {
+            if (!err) {
                 $scope.conv = conv;
-            ForumServ.getMesss(conv._id, function (err, messs) {
-                if (!err)
-                    $scope.messs = messs;
-            });
+                ApiServ("récupération des messages", 'get', 'messs', conv._id, function (err, messs) {
+                    if (!err)
+                        $scope.messs = messs;
+                });
+            }
         });
 
         $scope.createMess = function () {
             data = $scope.formData;
             data.conv = $scope.conv._id;
-            ForumServ.createMess(data, function (err, mess) {
-                console.log(mess);
+            ApiServ("envoi du message", 'post', 'messs', data, function (err, mess) {
                 if (!err)
                     $scope.formData = {};
                 $scope.messs.push(mess);
@@ -29,7 +29,7 @@ angular.module('ForumConvCtrl', ['SessionsServ', 'ForumServ', 'NotifyServ']).con
         };
 
         $scope.deleteMess = function (index) {
-            ForumServ.deleteMess($scope.messs[index]._id, function (err) {
+            ApiServ("suppression du message", 'delete', 'messs', $scope.messs[index]._id, function (err) {
                 if (!err)
                     $scope.messs.splice(index, 1);
             });
