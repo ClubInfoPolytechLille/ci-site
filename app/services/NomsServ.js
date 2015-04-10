@@ -113,6 +113,9 @@ noms.get = function (login, cb) {
                     } else {
                         console.error("Impossible d'obtenir le nom de " + login + ".");
                     }
+                    if (!login) {
+                        login = 'Inconnu';
+                    }
                     cb({
                         nom: login.toUpperCase(),
                         section: 'Inconnue'

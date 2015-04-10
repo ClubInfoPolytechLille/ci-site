@@ -119,7 +119,9 @@ api.get('/membres', function (req, res) { // Liste des membres
     });
 });
 
-api.post('/membres', reqPerm('canAddMembre'), function (req, res) { // Ajout d'un membre
+api.post('/membres', assert(function (req, res, cb) {
+    cb(typeof req.body.login == 'string' && req.body.login !== '');
+}), reqPerm('canAddMembre'), function (req, res) { // Ajout d'un membre
     MembresServ.add(req.body, function (err, membre) {
         if (err)
             res.send(err);
