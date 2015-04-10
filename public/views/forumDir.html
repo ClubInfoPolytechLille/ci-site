@@ -1,8 +1,8 @@
 <div class="container">
     <ol class="breadcrumb">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Library</a></li>
-        <li class="active">Data</li>
+        <li><a href="#">Forum</a></li>
+        <li><a href="#">Dossiers</a></li>
+        <li class="active">{{ dossier.name }}</li>
     </ol>
     <div class="panel panel-default" ng-repeat="conv in convs">
         <div class="panel-heading">
@@ -11,8 +11,7 @@
             </a>
         </div>
         <div class="panel-body">
-            <strong>Date : </strong>{{ conv.date }}
-            <br/>
+            <!-- <strong>Date : </strong>{{ conv.date }}<br/> -->
             <button ng-if="session.canDelConv" type="button" class="btn btn-danger" ng-click="deleteConv($index)">
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Supprimer
             </button>

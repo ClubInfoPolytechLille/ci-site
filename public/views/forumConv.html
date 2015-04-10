@@ -1,10 +1,36 @@
 <div class="container">
     <ol class="breadcrumb">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Library</a></li>
-        <li class="active">Conv</li>
+        <li><a href="#">Forum</a></li>
+        <li><a href="#">Conversations</a></li>
+        <li class="active">{{ conv.titre }}</li>
     </ol>
     <h1>{{ conv.titre }}</h1>
+    <div class="panel panel-default" ng-repeat="mess in messs">
+        <div class="panel-heading">
+            {{ mess.login }}
+            <button ng-if="session.canDelMess" type="button" class="btn btn-danger" ng-click="deleteMess($index)">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Supprimer
+            </button>
+        </div>
+        <div class="panel-body">
+            {{ mess.content }}
+        </div>
+    </div>
+    <div class="form-group" ng-if="session.canAddMess">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    Nouveau message
+                </h4>
+            </div>
+            <div class="panel-body">
+                <textarea class="form-control" rows="3" ng-model="formData.content"></textarea>
+                <button type="submit" class="btn btn-primary" aria-label="Ajouter" ng-click="createMess()">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ajouter
+                </button>
+            </div>
+        </div>
+    </div>
     <nav>
         <ul class="pagination">
             <li>

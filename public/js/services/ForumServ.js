@@ -44,6 +44,42 @@ angular.module('ForumServ', ['NotifyServ']).service('ForumServ', ['$http', 'Noti
                     .error(function (data) {
                         not.error("Impossible de supprimer le conv", data);
                     });
+            },
+
+            // Message
+            getMesss: function (conv, cb) {
+                // TODO Dirs
+                $http.get('/api/messs/' + conv)
+                    .success(function (data) {
+                        cb(null, data);
+                    })
+                    .error(function (data) { // TODO CBs
+                        NotifyServ.error("Impossible d'obtenir la liste des messs", data);
+                    });
+            },
+
+            createMess: function (data, cb) {
+                var not = NotifyServ.promise("Ajout du mess...");
+                $http.post('/api/messs', data)
+                    .success(function (mess) {
+                        not.success("Mess ajouté");
+                        cb(null, mess);
+                    })
+                    .error(function (data) {
+                        not.error("Impossible d'ajouter le mess");
+                    });
+            },
+
+            deleteMess: function (id, cb) {
+                var not = NotifyServ.promise("Suppression du mess...");
+                $http.delete('/api/messs/' + id)
+                    .success(function (mess) {
+                        not.success("Mess supprimé");
+                        cb(null);
+                    })
+                    .error(function (data) {
+                        not.error("Impossible de supprimer le mess", data);
+                    });
             }
         };
         return a;

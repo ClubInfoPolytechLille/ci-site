@@ -5,7 +5,7 @@ module.exports = mongoose.model('Membre', {
         type: String,
         default: 'login'
     },
-    section: {
+    section: { // TODO From /etc/groups
         type: String,
         default: 'IMA'
     },

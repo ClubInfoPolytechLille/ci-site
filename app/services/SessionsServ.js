@@ -15,8 +15,10 @@ sessions.addData = function (session, cb) {
         }
         session.canAddMembre = session.login == 'gbontoux';
         session.canDelMembre = session.login == 'gbontoux';
-        session.canAddConv = session.login == 'gbontoux';
+        session.canAddConv = true;
         session.canDelConv = session.login == 'gbontoux';
+        session.canAddMess = true;
+        session.canDelMess = session.login == 'gbontoux';
         cb(session);
     });
 };
@@ -70,7 +72,7 @@ sessions.use = function (id, cb) {
         if (err) {
             cb(err);
         } else {
-            _this.cur = session;
+            _this.cur = session; // TODO Get rid of _this.cur
             cb(null);
         }
     });
