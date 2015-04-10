@@ -35,7 +35,7 @@ reqVerified = function (verify) {
                     if (verified) {
                         next();
                     } else {
-                        res.status(403);
+                        res.status(403).end();
                     }
                 }
             });
@@ -59,7 +59,7 @@ assert = function (test) {
                     if (verified) {
                         next();
                     } else {
-                        res.status(400);
+                        res.status(400).end();
                     }
                 }
             });
@@ -120,7 +120,7 @@ api.get('/membres', function (req, res) { // Liste des membres
 });
 
 api.post('/membres', assert(function (req, res, cb) {
-    cb(typeof req.body.login == 'string' && req.body.login !== '');
+    cb(null, typeof req.body.login == 'string' && req.body.login !== '');
 }), reqPerm('canAddMembre'), function (req, res) { // Ajout d'un membre
     MembresServ.add(req.body, function (err, membre) {
         if (err)
