@@ -1,5 +1,6 @@
 var SessionModl = require('../models/SessionModl');
 var NomsServ = require('../services/NomsServ');
+var MembresServ = require('../services/MembresServ');
 var SshAuthServ = require('../services/SshAuthServ');
 
 var sessions = {};
@@ -11,14 +12,17 @@ sessions.addData = function (session, cb) {
         // Nom
         session.nom = nom.nom;
         session.section = nom.section;
-        // Permissions
-        session.canAddMembre = session.login == 'gbontoux';
-        session.canDelMembre = session.login == 'gbontoux';
-        session.canAddConv = true;
-        session.canDelConv = session.login == 'gbontoux';
-        session.canAddMess = true;
-        session.canDelMess = session.login == 'gbontoux';
-        cb(session);
+        MembresServ.estBureau(session.login, function (bureau) {
+            session.bureau = bureau;
+            // Permissions
+            session.canAddMembre = session.bureau;
+            session.canDelMembre = session.bureau;
+            session.canAddConv = true;
+            session.canDelConv = session.bureau;
+            session.canAddMess = true;
+            session.canDelMess = session.bureau;
+            cb(session);
+        });
     });
 };
 
