@@ -14,14 +14,18 @@ angular.module('MembreCtrl', ['SessionsServ', 'ApiServ']).controller('MembreCtrl
 
         $scope.createMembre = function () {
             ApiServ("création du membre", 'post', 'membres', $scope.formData, function (err, membre) {
-                $scope.formData = {};
-                $scope.membres.push(membre);
+                if (!err) {
+                    $scope.formData = {};
+                    $scope.membres.push(membre);
+                }
             });
         };
 
         $scope.deleteMembre = function (index) {
             ApiServ("création du membre", 'delete', 'membres', $scope.membres[index]._id, function (err, data) {
-                $scope.membres.splice(index, 1);
+                if (!err) {
+                    $scope.membres.splice(index, 1);
+                }
             });
         };
     }

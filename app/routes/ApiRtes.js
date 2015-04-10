@@ -10,6 +10,9 @@ var api = express();
 // Authentication
 reqAuth = function () {
     return function (req, res, next) {
+        if (!req.cookies) {
+            res.status(401).end();
+        }
         SessionsServ.use(req.cookies.session, function (err, session) {
             if (err) {
                 res.status(500).send(err);
@@ -51,22 +54,32 @@ reqPerm = function (perm) {
 
 assert = function (test) {
     return function (req, res, next) {
-        reqAuth()(req, res, function () {
-            test(req, res, function (err, verified) {
-                if (err) {
-                    res.status(500).send(err);
+        test(req, res, function (err, verified) {
+            if (err) {
+                res.status(500).send(err);
+            } else {
+                if (verified) {
+                    next();
                 } else {
-                    if (verified) {
-                        next();
-                    } else {
-                        res.status(400).end();
-                    }
+                    res.status(400).end();
                 }
-            });
+            }
         });
     };
 };
 
+decrypt = function () {
+    return function (req, res, next) {
+        assert(function (req, res, cb) {
+            cb(null, req.body && typeof req.body[0] == 'string' && req.body[0] !== '');
+        })(req, res, function () {
+            DecryptServ.decrypt(req.body[0], function (data) {
+                req.body = JSON.parse(data);
+                next();
+            });
+        });
+    };
+};
 
 // Sessions
 api.get('/session', function (req, res) { // Informations sur la session
@@ -84,16 +97,16 @@ api.get('/session', function (req, res) { // Informations sur la session
     }
 });
 
-api.post('/session', function (req, res) { // Se connecter
-    DecryptServ.decrypt(req.body[0], function (data) {
-        SessionsServ.open(JSON.parse(data), function (err, session) {
-            if (err) {
-                res.status(500).send(err);
-            } else {
-                res.cookie('session', session._id);
-                res.send(session);
-            }
-        });
+api.post('/session', decrypt(), assert(function (req, res, cb) {
+    cb(null, req.body && typeof req.body.login == 'string' && req.body.login !== '' && typeof req.body.pass == 'string' && req.body.pass !== '');
+}), function (req, res) { // Se connecter
+    SessionsServ.open(req.body, function (err, session) {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.cookie('session', session._id);
+            res.send(session);
+        }
     });
 });
 

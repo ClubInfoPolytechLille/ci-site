@@ -47,18 +47,17 @@ angular.module('SessionsServ', ['NotifyServ', 'EncryptServ']).service('SessionSe
                         _this.updateSessionInfos(body);
                         if (_this.cur) {
                             not.success("Connecté en tant que <strong>" + _this.cur.nom + "</strong>");
-                            if (cb)
-                                cb(null);
+                            cb(null);
                         } else {
                             if (body === 'invalid') {
                                 not.warn("Identifiants invalides");
                             }
-                            if (cb)
-                                cb(body);
+                            cb(body);
                         }
-                    }).error(function (body) {
-                        not.error("Impossible de se connecter", body);
-                        cb(body);
+                    }).error(function (data, status) {
+                        err = status + (data ? ' : ' + JSON.stringify(data) : '');
+                        not.error("Impossible de se connecter", err);
+                        cb(err);
                     });
                 });
             },
