@@ -5,14 +5,6 @@ module.exports = mongoose.model('Membre', {
         type: String,
         default: 'login'
     },
-    section: { // TODO From /etc/groups
-        type: String,
-        default: 'IMA'
-    },
-    promo: { // Nécessaire pour calculer le numéro de section
-        type: Number,
-        default: 2017
-    },
     role: {
         type: String,
         default: 'Membre'

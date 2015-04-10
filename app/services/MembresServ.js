@@ -6,16 +6,13 @@ var MembresServ = {};
 
 MembresServ.addData = function (membre, cb) {
     NomsServ.get(membre.login, function (nom) {
-        if (nom) {
-            membre.nom = nom;
-        } else {
-            membre.nom = membre.login;
-        }
+        membre.nom = nom.nom;
+        membre.section = nom.section;
         cb(null, membre);
     });
 };
 
-MembresServ.get = function(id, cb) {
+MembresServ.get = function (id, cb) {
     MembreModl.findById(id).lean().exec(function (err, membre) {
         if (err)
             cb(err);
@@ -35,7 +32,7 @@ MembresServ.add = function (data, cb) {
         login: data.login,
         role: data.role,
         section: data.section,
-    }, function(err, membre) {
+    }, function (err, membre) {
         MembresServ.get(membre._id, cb);
     });
 };

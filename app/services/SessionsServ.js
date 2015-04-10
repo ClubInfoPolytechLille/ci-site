@@ -8,11 +8,10 @@ sessions.cur = false;
 
 sessions.addData = function (session, cb) {
     NomsServ.get(session.login, function (nom) {
-        if (typeof nom == 'string') {
-            session.nom = nom;
-        } else {
-            session.nom = 'Inconnu';
-        }
+        // Nom
+        session.nom = nom.nom;
+        session.section = nom.section;
+        // Permissions
         session.canAddMembre = session.login == 'gbontoux';
         session.canDelMembre = session.login == 'gbontoux';
         session.canAddConv = true;

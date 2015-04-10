@@ -8,5 +8,9 @@ module.exports = mongoose.model('Noms', {
     nom: {
         type: String,
         default: 'Nom'
+    },
+    section: {
+        type: String,
+        default: ''
     }
 });
