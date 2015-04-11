@@ -1,5 +1,5 @@
-angular.module('ConnectCtrl', ['SessionsServ', 'EncryptServ', 'angular-ladda']).controller('ConnectCtrl', ['$scope', 'SessionServ', 'EncryptServ',
-    function ($scope, SessionServ, EncryptServ) {
+angular.module('ConnectCtrl', ['SessionsServ', 'EncryptServ', 'angular-ladda'])
+    .controller('ConnectCtrl', function ($scope, SessionServ, EncryptServ) {
         EncryptServ.preload(function () {
             return undefined;
         });
@@ -15,5 +15,4 @@ angular.module('ConnectCtrl', ['SessionsServ', 'EncryptServ', 'angular-ladda']).
                 });
             }
         };
-    }
-]);
+    });

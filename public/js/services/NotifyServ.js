@@ -1,5 +1,5 @@
-angular.module('NotifyServ', []).service('NotifyServ', [
-    function () {
+angular.module('NotifyServ', [])
+    .service('NotifyServ', function () {
         $.notifyDefaults({
             placement: {
                 from: 'bottom',
@@ -97,5 +97,4 @@ angular.module('NotifyServ', []).service('NotifyServ', [
                 };
             }
         };
-    }
-]);
+    });

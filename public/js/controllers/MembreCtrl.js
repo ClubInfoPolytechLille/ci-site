@@ -1,5 +1,5 @@
-angular.module('MembreCtrl', ['SessionsServ', 'ApiServ']).controller('MembreCtrl', ['$scope', '$http', 'SessionServ', 'ApiServ',
-    function ($scope, $http, SessionServ, ApiServ) {
+angular.module('MembreCtrl', ['SessionsServ', 'ApiServ'])
+    .controller('MembreCtrl', function ($scope, SessionServ, ApiServ) {
         $scope.formData = {};
 
         $scope.session = SessionServ.cur;
@@ -28,5 +28,4 @@ angular.module('MembreCtrl', ['SessionsServ', 'ApiServ']).controller('MembreCtrl
                 }
             });
         };
-    }
-]);
+    });

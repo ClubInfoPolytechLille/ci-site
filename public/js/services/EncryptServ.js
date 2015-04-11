@@ -1,5 +1,5 @@
-angular.module('EncryptServ', []).service('EncryptServ', ['$http',
-    function ($http) {
+angular.module('EncryptServ', [])
+    .service('EncryptServ', function ($http) {
         a = {
             encrypter: false,
             whenOk: function (cb) {
@@ -26,5 +26,4 @@ angular.module('EncryptServ', []).service('EncryptServ', ['$http',
             }
         };
         return a;
-    }
-]);
+    });

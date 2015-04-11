@@ -1,5 +1,5 @@
-angular.module('SessionsServ', ['NotifyServ', 'EncryptServ']).service('SessionServ', ['$http', 'EncryptServ', 'NotifyServ',
-    function ($http, EncryptServ, NotifyServ) {
+angular.module('SessionsServ', ['NotifyServ', 'EncryptServ'])
+    .service('SessionServ', function ($http, EncryptServ, NotifyServ) {
         a = {
             cur: false,
             changeHandlers: [],
@@ -74,5 +74,4 @@ angular.module('SessionsServ', ['NotifyServ', 'EncryptServ']).service('SessionSe
         };
         a.get();
         return a;
-    }
-]);
+    });

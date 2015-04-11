@@ -1,5 +1,5 @@
-angular.module('ApiServ', ['NotifyServ']).service('ApiServ', ['$http', 'NotifyServ',
-    function ($http, NotifyServ) {
+angular.module('ApiServ', ['NotifyServ'])
+    .service('ApiServ', function ($http, NotifyServ) {
         return function (name, method, href) {
             link = '/api/' + href;
             arglen = arguments.length;
@@ -30,5 +30,4 @@ angular.module('ApiServ', ['NotifyServ']).service('ApiServ', ['$http', 'NotifySe
                     // console.error(name, status, data);
                 });
         };
-    }
-]);
+    });

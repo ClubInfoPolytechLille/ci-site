@@ -1,5 +1,5 @@
-angular.module('ForumConvCtrl', ['SessionsServ', 'ApiServ']).controller('ForumConvCtrl', ['$scope', '$routeParams', 'SessionServ', 'ApiServ',
-    function ($scope, $routeParams, SessionServ, ApiServ) {
+angular.module('ForumConvCtrl', ['SessionsServ', 'ApiServ'])
+    .controller('ForumConvCtrl', function ($scope, $routeParams, SessionServ, ApiServ) {
         $scope.messs = [];
         $scope.conv = {};
         $scope.formData = {};
@@ -35,5 +35,4 @@ angular.module('ForumConvCtrl', ['SessionsServ', 'ApiServ']).controller('ForumCo
             });
         };
 
-    }
-]);
+    });
