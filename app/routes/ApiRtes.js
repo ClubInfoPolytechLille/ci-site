@@ -86,13 +86,16 @@ api.get('/session', function (req, res) { // Informations sur la session
     if (req.cookies && req.cookies.session) {
         SessionsServ.use(req.cookies.session, function (err, session) {
             if (err) {
+                res.clearCookie('session');
+                // TODO Pas vraiment un 500
+                // TODO Gérer ça mieux coté client
                 res.status(500).send(err);
             } else {
                 res.send(session);
             }
         });
-        // TODO si pas bon : res.clearCookie('session')
     } else {
+        res.clearCookie('session');
         res.send('missing');
     }
 });

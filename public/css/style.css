@@ -11,7 +11,7 @@ body {
 }
 
 [ng-repeat].ng-enter {
-    -webkit-animation: fadeInLeft 0.5s;
+    -webkit-animation: fadeInRight 0.5s;
     animation: fadeInLeft 0.5s;
 }
 

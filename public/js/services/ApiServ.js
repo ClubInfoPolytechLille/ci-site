@@ -26,7 +26,7 @@ angular.module('ApiServ', ['NotifyServ']).service('ApiServ', ['$http', 'NotifySe
                 })
                 .error(function (data, status) {
                     cb(status);
-                    NotifyServ.error("Échec : ", name, status + (data ? ' : ' + JSON.stringify(data) : ''));
+                    NotifyServ.error("Échec : " + name, status + (data ? ' : ' + JSON.stringify(data) : ''));
                     // console.error(name, status, data);
                 });
         };
