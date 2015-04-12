@@ -14,7 +14,7 @@
             </tr>
         </thead>
         <tbody data-as-sortable="dragControlListeners" data-ng-model="membres">
-            <tr data-ng-repeat="membre in membres" data-as-sortable-item>
+            <tr data-ng-repeat="membre in membres" data-as-sortable-item ng-class="{bureau: membre.bureau}">
                 <td>{{ membre.nom }}</td>
                 <td>{{ membre.section }}</td>
                 <td>{{ membre.role }}</td>

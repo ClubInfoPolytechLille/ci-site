@@ -8,7 +8,10 @@ MembresServ.addData = function (membre, cb) {
     PolyUserServ.get(membre.login, function (err, nom) {
         membre.nom = nom.nom;
         membre.section = nom.section;
-        cb(null, membre);
+        MembresServ.estBureau(membre.login, function (bureau) {
+            membre.bureau = bureau;
+            cb(err, membre);
+        });
     });
 };
 

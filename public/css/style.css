@@ -59,3 +59,7 @@ table .ng-leave {
     -webkit-animation: fadeOutLeft 0.5s;
     animation: fadeOutLeft 0.5s;
 }
+
+.bureau {
+    color: blue;
+}
