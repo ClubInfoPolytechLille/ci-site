@@ -2,7 +2,6 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
 
 // Application ================================================================
 
@@ -19,9 +18,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-
-// Cookie-parser
-app.use(cookieParser());
 
 // Routes
 require('./app/routes')(app);

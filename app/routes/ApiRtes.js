@@ -3,8 +3,10 @@ var PolyUserServ = require('../services/PolyUserServ');
 var DecryptServ = require('../services/DecryptServ');
 var ConvsServ = require('../services/ConvsServ');
 var MessServ = require('../services/MessServ');
+var fs = require('fs');
 var express = require('express');
-session = require('express-session');
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 
 var api = express();
 
@@ -98,7 +100,9 @@ api.use(session({
     name: 'membreCool',
     resave: false,
     saveUninitialized: true,
-    secret: "Le Club Info c'est cool" // TODO Vrai secret https://gist.github.com/earthgecko/3089509
+    secret: fs.readFileSync('config/session_secret', {
+        encoding: 'UTF8'
+    })
 }));
 
 api.get('/session', function (req, res) { // Informations sur la session
