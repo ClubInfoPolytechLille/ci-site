@@ -1,34 +1,25 @@
 var MembresServ = require('../services/MembresServ');
-var SessionsServ = require('../services/SessionsServ');
+var PolyUserServ = require('../services/PolyUserServ');
 var DecryptServ = require('../services/DecryptServ');
 var ConvsServ = require('../services/ConvsServ');
 var MessServ = require('../services/MessServ');
 var express = require('express');
+session = require('express-session');
 
 var api = express();
 
 // Authentication
 reqAuth = function () {
     return function (req, res, next) {
-        if (!req.cookies) {
+        if (req.session.data && req.session.data.login) {
+            next();
+        } else {
             res.status(401).end();
         }
-        SessionsServ.use(req.cookies.session, function (err, session) {
-            if (err) {
-                res.status(500).send(err);
-            } else {
-                if (session) {
-                    req.session = session;
-                    next();
-                } else {
-                    res.status(401).end();
-                }
-            }
-        });
     };
 };
 
-reqVerified = function (verify) {
+reqVerified = function (verify) { // Assert mais pour les droits (d'où le 403)
     return function (req, res, next) {
         reqAuth()(req, res, function () {
             verify(req, res, function (err, verified) {
@@ -48,7 +39,7 @@ reqVerified = function (verify) {
 
 reqPerm = function (perm) {
     return reqVerified(function (req, res, cb) {
-        cb(null, req.session[perm]);
+        cb(null, req.session.data[perm]);
     });
 };
 
@@ -82,46 +73,74 @@ decrypt = function () {
 };
 
 // Sessions
-api.get('/session', function (req, res) { // Informations sur la session
-    if (req.cookies && req.cookies.session) {
-        SessionsServ.use(req.cookies.session, function (err, session) {
-            if (err) {
-                res.clearCookie('session');
-                // TODO Pas vraiment un 500
-                // TODO Gérer ça mieux coté client
-                res.status(500).send(err);
-            } else {
-                res.send(session);
-            }
+
+sessionData = function (session, cb) {
+    PolyUserServ.get(session.login, function (err, nom) {
+        // Nom
+        session.nom = nom.nom;
+        session.section = nom.section;
+        MembresServ.estBureau(session.login, function (bureau) {
+            session.bureau = bureau;
+            // Permissions
+            session.canAddMembre = session.bureau;
+            session.canDelMembre = session.bureau;
+            session.canAddConv = true;
+            session.canDelConv = session.bureau;
+            session.canAddMess = true;
+            session.canDelMess = session.bureau;
+            cb(session);
         });
-    } else {
-        res.clearCookie('session');
-        res.send('missing');
-    }
+    });
+};
+
+api.use(session({
+    // TODO Session store https://github.com/expressjs/session#compatible-session-stores
+    name: 'membreCool',
+    resave: false,
+    saveUninitialized: true,
+    secret: "Le Club Info c'est cool" // TODO Vrai secret https://gist.github.com/earthgecko/3089509
+}));
+
+api.get('/session', function (req, res) { // Informations sur la session
+    res.send(req.session.data);
 });
 
 api.post('/session', decrypt(), assert(function (req, res, cb) {
     cb(null, req.body && typeof req.body.login == 'string' && req.body.login !== '' && typeof req.body.pass == 'string' && req.body.pass !== '');
 }), function (req, res) { // Se connecter
-    SessionsServ.open(req.body, function (err, session) {
+    PolyUserServ.verify(req.body.login, req.body.pass, function (err, verified) {
         if (err) {
             res.status(500).send(err);
         } else {
-            res.cookie('session', session._id);
-            res.send(session);
+            if (verified) {
+                sessionData({
+                    login: req.body.login
+                }, function (session) {
+                    req.session.data = session;
+                    req.session.save(function (err) {
+                        if (err) {
+                            res.status(500).end("Sauvegarde session");
+                        } else {
+                            res.status(201).send(session);
+                        }
+                    });
+                });
+            } else {
+                req.session.destroy(function (err) {
+                    if (err) {
+                        res.status(500).end("Suppression de la session");
+                    } else {
+                        res.status(401).end();
+                    }
+                });
+            }
         }
     });
 });
 
 api.delete('/session', function (req, res) { // Se déconnecter
-    if (req.cookies.session) {
-        SessionsServ.delete(req.cookies.session, function () {
-            res.clearCookie('session');
-            res.end();
-        });
-    } else {
-        res.send('missing');
-    }
+    req.session.destroy();
+    res.status(200).end();
 });
 
 
