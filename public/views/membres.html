@@ -13,12 +13,15 @@
                 <th ng-if="session.canAddMembre || session.canDelMembre">Action</th>
             </tr>
         </thead>
-        <tbody ng-repeat="membre in membres">
-            <tr>
+        <tbody data-as-sortable="dragControlListeners" data-ng-model="membres">
+            <tr data-ng-repeat="membre in membres" data-as-sortable-item>
                 <td>{{ membre.nom }}</td>
                 <td>{{ membre.section }}</td>
                 <td>{{ membre.role }}</td>
                 <td ng-if="session.canDelMembre">
+                    <button type="button" class="btn btn-default" aria-label="Déplacer" data-as-sortable-item-handle>
+                        <span class="glyphicon glyphicon-resize-vertical" aria-hidden="true"></span>
+                    </button>
                     <button type="button" class="btn btn-danger" aria-label="Expulser" ng-click="deleteMembre($index)">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     </button>

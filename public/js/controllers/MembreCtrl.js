@@ -1,5 +1,6 @@
-angular.module('MembreCtrl', ['SessionsServ', 'ApiServ'])
+angular.module('MembreCtrl', ['SessionsServ', 'ApiServ', 'ui.sortable'])
     .controller('MembreCtrl', function ($scope, SessionServ, ApiServ) {
+        $scope.membres = [];
         $scope.formData = {};
 
         $scope.session = SessionServ.cur;
@@ -11,6 +12,12 @@ angular.module('MembreCtrl', ['SessionsServ', 'ApiServ'])
             if (!err)
                 $scope.membres = membres;
         });
+
+        // $scope.dragControlListeners = {
+        //     orderChanged: function (e) {
+        //         console.log('Swap', e.source.index, e.dest.index);
+        //     }
+        // };
 
         $scope.createMembre = function () {
             ApiServ("création du membre", 'post', 'membres', $scope.formData, function (err, membre) {
