@@ -1,12 +1,12 @@
 var MessModl = require('../models/MessModl');
-// var NomsServ = require('../services/NomsServ');
+// var PolyUserServ = require('../services/PolyUserServ');
 var ConvsServ = require('../services/ConvsServ');
 var async = require('async');
 
 var MesssServ = {};
 
 MesssServ.addData = function (mess, cb) {
-    // NomsServ.get(Mess.login, function (nom) {
+    // PolyUserServ.get(Mess.login, function (err, nom) {
     //     if (nom) {
     //         Mess.nom = nom;
     //     } else {

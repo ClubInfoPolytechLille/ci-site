@@ -1,11 +1,11 @@
 var ConvModl = require('../models/ConvModl');
-// var NomsServ = require('../services/NomsServ');
+// var PolyUserServ = require('../services/PolyUserServ');
 var async = require('async');
 
 var ConvsServ = {};
 
 ConvsServ.addData = function (conv, cb) {
-    // NomsServ.get(Conv.login, function (nom) {
+    // PolyUserServ.get(Conv.login, function (err, nom) {
     //     if (nom) {
     //         Conv.nom = nom;
     //     } else {

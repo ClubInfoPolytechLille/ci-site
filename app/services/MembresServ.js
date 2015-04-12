@@ -1,11 +1,11 @@
 var MembreModl = require('../models/MembreModl');
-var NomsServ = require('../services/NomsServ');
+var PolyUserServ = require('../services/PolyUserServ');
 var async = require('async');
 
 var MembresServ = {};
 
 MembresServ.addData = function (membre, cb) {
-    NomsServ.get(membre.login, function (nom) {
+    PolyUserServ.get(membre.login, function (err, nom) {
         membre.nom = nom.nom;
         membre.section = nom.section;
         cb(null, membre);

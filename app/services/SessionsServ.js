@@ -1,14 +1,13 @@
 var SessionModl = require('../models/SessionModl');
-var NomsServ = require('../services/NomsServ');
+var PolyUserServ = require('../services/PolyUserServ');
 var MembresServ = require('../services/MembresServ');
-var SshAuthServ = require('../services/SshAuthServ');
 
 var sessions = {};
 
 sessions.cur = false;
 
 sessions.addData = function (session, cb) {
-    NomsServ.get(session.login, function (nom) {
+    PolyUserServ.get(session.login, function (err, nom) {
         // Nom
         session.nom = nom.nom;
         session.section = nom.section;
@@ -87,7 +86,7 @@ sessions.create = function (login, cb) {
 };
 
 sessions.login = function (data, cb) {
-    SshAuthServ.verify(data.login, data.pass, cb);
+    PolyUserServ.verify(data.login, data.pass, cb);
 };
 
 sessions.open = function (data, cb) {

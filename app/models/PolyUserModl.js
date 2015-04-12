@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
-module.exports = mongoose.model('Noms', {
-    login: { // On récupèrera le nom via les passwd
+module.exports = mongoose.model('PolyUser', {
+    login: {
         type: String,
         default: 'login'
     },
