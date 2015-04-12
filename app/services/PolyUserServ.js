@@ -1,10 +1,19 @@
-var PolyUserModl = require('../models/PolyUserModl');
 var LineTransform = require('node-line-reader').LineTransform;
 var fs = require('fs');
 var Client = require('ssh2').Client;
 var creds = require('../../config/sshAuth');
+var NodeCache = require("node-cache");
+
+var cache = new NodeCache();
 
 var PolyUserServ = {};
+
+function isEmpty(obj) {
+    for (var i in obj) {
+        return false;
+    }
+    return true;
+}
 
 PolyUserServ.readPasswd = function (login, cb) {
     passwdF = 'config/passwd';
@@ -82,11 +91,6 @@ PolyUserServ.grabInfos = function (login, cb) {
                         nom: passwd.GECOS,
                         section: group.name.toUpperCase()
                     });
-                    PolyUserModl.create({
-                        login: login,
-                        nom: passwd.GECOS,
-                        section: group.name.toUpperCase()
-                    });
                 } else {
                     if (group === undefined) {
                         console.error("Impossible d'ouvrir le fichier des groupes.");
@@ -116,49 +120,23 @@ PolyUserServ.grabInfos = function (login, cb) {
     });
 };
 
-PolyUserServ.addData = function (polyuser, cb) {
-    cb(null, polyuser);
+PolyUserServ.add = function (login, cb) {
+    PolyUserServ.grabInfos(login, function (data) {
+        cb(null, data);
+        cache.set(login, data);
+    });
 };
 
-PolyUserServ.obtain = function (login, cb) {
-    PolyUserModl.findOne({
-        login: login
-    }, {
-        nom: 1,
-        section: 1,
-        _id: 0
-    }, function (err, polyuser) {
+PolyUserServ.get = function (login, cb) {
+    cache.get(login, function (err, data) {
         if (err) {
             cb(err);
         } else {
-            PolyUserServ.addData(polyuser, cb);
-        }
-    });
-};
-
-PolyUserServ.add = function (login, cb) {
-    PolyUserServ.grabInfos(login, function (data) {
-        data.login = login;
-        PolyUserModl.create(data, function (err, polyuser) {
-            PolyUserServ.obtain(login, cb);
-        });
-    });
-};
-
-// PolyUserServ.remove = function (login, cb) {
-//     PolyUserModl.remove({
-//         login: login
-//     }, cb);
-// };
-
-PolyUserServ.get = function (login, cb) {
-    PolyUserModl.findOne({
-        login: login
-    }, function (err, polyuser) {
-        if (polyuser && !err && polyuser.polyuser && polyuser.section) {
-            PolyUserServ.obtain(login, cb);
-        } else {
-            PolyUserServ.add(login, cb);
+            if (isEmpty(data)) {
+                PolyUserServ.add(login, cb);
+            } else {
+                cb(null, data[login]);
+            }
         }
     });
 };

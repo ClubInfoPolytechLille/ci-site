@@ -9,6 +9,7 @@
     "express": "^4.12.3",
     "express-http-proxy": "^0.5.0",
     "mongoose": "^4.0.1",
+    "node-cache": "^1.1.0",
     "node-line-reader": "0.0.2",
     "ssh2": "^0.4.6",
     "ursa": "^0.8.4"
