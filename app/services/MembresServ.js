@@ -50,7 +50,7 @@ MembresServ.estBureau = function (login, cb) {
     MembreModl.findOne({
         login: login
     }, function (err, data) {
-        if (!err && data && data.role != 'Membre') {
+        if (!err && data && ['Président', 'Vice-président', 'Trésorier', 'Secrétaire'].indexOf(data.role) > -1) {
             cb(true);
         } else {
             cb(false);
