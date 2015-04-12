@@ -23,9 +23,6 @@ app.use(bodyParser.urlencoded({
 // Cookie-parser
 app.use(cookieParser());
 
-// Dossier public
-app.use(express.static(__dirname + '/public'));
-
 // Routes
 require('./app/routes')(app);
 
