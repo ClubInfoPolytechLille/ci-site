@@ -4,11 +4,15 @@ var DecryptServ = require('../services/DecryptServ');
 var ConvsServ = require('../services/ConvsServ');
 var MessServ = require('../services/MessServ');
 var fs = require('fs');
+var mongoose = require('mongoose');
 var express = require('express');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 
 var api = express();
+
+// Connection à la BDD
+mongoose.connect(require('../../config/db').url);
 
 // Authentication
 reqAuth = function () {
@@ -96,7 +100,9 @@ sessionData = function (session, cb) {
 };
 
 api.use(session({
-    // TODO Session store https://github.com/expressjs/session#compatible-session-stores
+    store: new MongoStore({
+        mongooseConnection: mongoose.connection
+    }),
     name: 'membreCool',
     resave: false,
     saveUninitialized: true,

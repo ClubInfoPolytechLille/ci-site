@@ -1,6 +1,5 @@
 // Modules ====================================================================
 var express = require('express');
-var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 
 // Application ================================================================
@@ -8,10 +7,6 @@ var bodyParser = require('body-parser');
 var app = express();
 var config = require('./config/config.js');
 var port = process.env.PORT || config.port;
-
-// Connection à la BDD
-var db = require('./config/db');
-mongoose.connect(db.url);
 
 // Tricks
 app.use(bodyParser.json());
