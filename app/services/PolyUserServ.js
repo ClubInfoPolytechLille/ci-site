@@ -8,13 +8,6 @@ var cache = new NodeCache();
 
 var PolyUserServ = {};
 
-function isEmpty(obj) {
-    for (var i in obj) {
-        return false;
-    }
-    return true;
-}
-
 PolyUserServ.readPasswd = function (login, cb) {
     passwdF = 'config/passwd';
     fs.exists(passwdF, function (exists) {
@@ -132,7 +125,7 @@ PolyUserServ.get = function (login, cb) {
         if (err) {
             cb(err);
         } else {
-            if (isEmpty(data)) {
+            if (data[login] === undefined) {
                 PolyUserServ.add(login, cb);
             } else {
                 cb(null, data[login]);
