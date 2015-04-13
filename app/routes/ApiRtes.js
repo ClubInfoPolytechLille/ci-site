@@ -243,7 +243,7 @@ api.get('/messs/:mess_id', reqAuth(), function (req, res) { // Une mess
 
 api.post('/messs', reqPerm('canAddMess'), function (req, res) { // Ajout d'un mess
     data = req.body;
-    data.login = req.session.login;
+    data.login = req.session.data.login;
     MessServ.add(data, function (err, mess) {
         if (err)
             res.status(500).send(err);
