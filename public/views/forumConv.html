@@ -12,8 +12,7 @@
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Supprimer
             </button>
         </div>
-        <div class="panel-body">
-            {{ mess.content }}
+        <div class="panel-body" btf-markdown="mess.content">
         </div>
     </div>
     <div class="form-group" ng-if="session.canAddMess">

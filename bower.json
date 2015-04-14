@@ -10,6 +10,7 @@
     "bootswatch-dist": "3.3.4-cerulean",
     "jsencrypt": "~2.1.0",
     "remarkable-bootstrap-notify": "~3.0.2",
-    "ng-sortable": "~1.2.0"
+    "ng-sortable": "~1.2.0",
+    "angular-markdown-directive": "~0.3.1"
   }
 }

@@ -1,4 +1,4 @@
-angular.module('ForumConvCtrl', ['SessionsServ', 'ApiServ'])
+angular.module('ForumConvCtrl', ['SessionsServ', 'ApiServ', 'ngSanitize', 'btford.markdown'])
     .controller('ForumConvCtrl', function ($scope, $routeParams, SessionServ, ApiServ) {
         $scope.messs = [];
         $scope.conv = {};
