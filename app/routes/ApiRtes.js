@@ -1,6 +1,7 @@
 var MembresServ = require('../services/MembresServ');
 var PolyUserServ = require('../services/PolyUserServ');
 var DecryptServ = require('../services/DecryptServ');
+var DosssServ = require('../services/DosssServ');
 var ConvsServ = require('../services/ConvsServ');
 var MessServ = require('../services/MessServ');
 var fs = require('fs');
@@ -94,6 +95,8 @@ sessionData = function (session, cb) {
             session.canDelConv = session.bureau;
             session.canAddMess = true;
             session.canDelMess = session.bureau;
+            session.canAddDoss = session.bureau;
+            session.canDelDoss = session.bureau;
             cb(session);
         });
     });
@@ -184,17 +187,58 @@ api.delete('/membres/:membre_id', reqPerm('canDelMembre'), function (req, res) {
     });
 });
 
-
-// Conversations
-api.get('/convs', function (req, res) { // Liste des convs
-    ConvsServ.list(function (err, convs) {
-        if (err)
+// Dossiers
+api.get('/dosss/:doss_id', function (req, res) { // Un doss
+    // TODO Assertion 404 existe, transformer req.body.id avec la vraie id (ou redirect)
+    // TODO Requêtes séparées ?
+    DosssServ.get(req.params.doss_id, function (err, doss) { // TODO Async
+        if (err) {
             res.status(500).send(err);
-        else
-            res.json(convs);
+        } else if (!doss) {
+            res.status(404);
+        } else {
+            DosssServ.children(doss._id, function (err, dosss) {
+                if (err) {
+                    res.status(500).send(err);
+                } else {
+                    doss.dosss = dosss;
+                    ConvsServ.children(doss._id, function (err, convs) {
+                        if (err) {
+                            res.status(500).send(err);
+                        } else {
+                            doss.convs = convs;
+                            res.json(doss);
+                        }
+                    });
+                }
+            });
+        }
     });
 });
 
+api.post('/dosss', reqPerm('canAddDoss'), function (req, res) { // Ajout d'un doss
+    // TODO Assertion 404 existe, transformer req.body.id avec la vraie id (ou redirect)
+    DosssServ.getId(req.body.parent, function (parent) { // TODO Async
+        req.body.parent = parent;
+        DosssServ.add(req.body, function (err, doss) {
+            if (err)
+                res.status(500).send(err);
+            else
+                res.json(doss);
+        });
+    });
+});
+
+api.delete('/dosss/:doss_id', reqPerm('canDelDoss'), function (req, res) { // Supression d'un doss
+    DosssServ.remove(req.params.doss_id, function (err, doss) {
+        if (err)
+            res.status(500).send(err);
+        else
+            res.json(null);
+    });
+});
+
+// Conversations
 api.get('/convs/:conv_id', function (req, res) { // Une conv
     ConvsServ.get(req.params.conv_id, function (err, conv) {
         if (err)
@@ -205,11 +249,15 @@ api.get('/convs/:conv_id', function (req, res) { // Une conv
 });
 
 api.post('/convs', reqPerm('canAddConv'), function (req, res) { // Ajout d'un conv
-    ConvsServ.add(req.body, function (err, conv) {
-        if (err)
-            res.status(500).send(err);
-        else
-            res.json(conv);
+    // TODO Assertion 404 existe, transformer req.body.id avec la vraie id (ou redirect)
+    DosssServ.getId(req.body.parent, function (parent) { // TODO Async
+        req.body.parent = parent;
+        ConvsServ.add(req.body, function (err, conv) {
+            if (err)
+                res.status(500).send(err);
+            else
+                res.json(conv);
+        });
     });
 });
 

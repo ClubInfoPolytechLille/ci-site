@@ -42,9 +42,18 @@ ConvsServ.list = function (cb) { // TODO Visibilité
     });
 };
 
+ConvsServ.children = function (id, cb) {
+    ConvModl.find({
+        parent: id
+    }).lean().exec(function (err, Conv) {
+        async.mapSeries(Conv, ConvsServ.addData, cb);
+    });
+};
+
 ConvsServ.add = function (data, cb) {
     ConvModl.create({
-        titre: data.titre
+        titre: data.titre,
+        parent: data.parent
     }, function (err, Conv) {
         ConvsServ.get(Conv._id, cb);
     });

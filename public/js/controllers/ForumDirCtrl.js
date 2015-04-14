@@ -1,29 +1,57 @@
 angular.module('ForumDirCtrl', ['SessionsServ', 'ApiServ'])
-    .controller('ForumDirCtrl', function ($scope, SessionServ, ApiServ) {
+    .controller('ForumDirCtrl', function ($scope, $routeParams, SessionServ, ApiServ) {
         $scope.convs = [];
-        $scope.formData = {};
+        $scope.dosss = [];
+        $scope.formDoss = {};
+        $scope.formConv = {};
 
         $scope.session = SessionServ.cur;
         SessionServ.onChange(function () {
             $scope.session = SessionServ.cur;
         });
 
-        ApiServ("récupération des conversations", 'get', 'convs', function (err, convs) {
-            if (!err)
-                $scope.convs = convs;
+        ApiServ("récupération du dossier", 'get', 'dosss', $routeParams.doss_id, function (err, doss) {
+            if (err) {
+                console.error(err);
+            } else {
+                if (doss) {
+                    $scope.dosss = doss.dosss;
+                    $scope.convs = doss.convs;
+                }
+            }
         });
 
-        $scope.createConv = function () {
-            ApiServ("création de la conversation", 'post', 'convs', $scope.formData, function (err, conv) {
+        // Dossiers
+        $scope.createDoss = function () {
+            $scope.formDoss.parent = $routeParams.doss_id;
+            ApiServ("création du dossier", 'post', 'dosss', $scope.formDoss, function (err, doss) {
                 if (!err) {
-                    $scope.formData = {};
+                    $scope.formDoss = {};
+                    $scope.dosss.push(doss);
+                }
+            });
+        };
+
+        $scope.deleteDoss = function (index) {
+            ApiServ("suppression du dossier", 'delete', 'dosss', $scope.dosss[index]._id, function (err) {
+                if (!err)
+                    $scope.dosss.splice(index, 1);
+            });
+        };
+
+        // Conversations
+        $scope.createConv = function () {
+            $scope.formConv.parent = $routeParams.doss_id;
+            ApiServ("création de la conversation", 'post', 'convs', $scope.formConv, function (err, conv) {
+                if (!err) {
+                    $scope.formConv = {};
                     $scope.convs.push(conv);
                 }
             });
         };
 
         $scope.deleteConv = function (index) {
-            ApiServ("création de la conversation", 'delete', 'convs', $scope.convs[index]._id, function (err) {
+            ApiServ("suppression de la conversation", 'delete', 'convs', $scope.convs[index]._id, function (err) {
                 if (!err)
                     $scope.convs.splice(index, 1);
             });

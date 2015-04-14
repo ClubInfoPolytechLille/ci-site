@@ -8,9 +8,9 @@ angular.module('ciApp', ['ngAnimate', 'ngRoute', 'ConnectCtrl', 'MembreCtrl', 'F
             controller: 'MembreCtrl'
         })
         .when('/forum', {
-            redirectTo: 'forum/dir/0'
+            redirectTo: 'forum/dir/root'
         })
-        .when('/forum/dir/:dir_id', {
+        .when('/forum/dir/:doss_id', {
             templateUrl: 'views/forumDir.html',
             controller: 'ForumDirCtrl'
         })

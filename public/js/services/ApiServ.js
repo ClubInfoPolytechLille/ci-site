@@ -1,6 +1,7 @@
 angular.module('ApiServ', ['NotifyServ'])
     .service('ApiServ', function ($http, NotifyServ) {
         return function (name, method, href) {
+            var cb;
             link = '/api/' + href;
             arglen = arguments.length;
             if (typeof arguments[arglen - 1] == 'function') {

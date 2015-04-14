@@ -1,14 +1,48 @@
 <div class="container">
     <ol class="breadcrumb">
-        <li><a href="#">Forum</a></li>
+        <li><a href="/forum">Forum</a></li>
         <li><a href="#">Dossiers</a></li>
-        <li class="active">{{ dossier.name }}</li>
+        <li class="active">{{ dossier.titre }}</li>
     </ol>
+    <h1>{{ doss.titre }}</h1>
+    <h2>Dossiers</h2>
+    <div class="panel panel-default" ng-repeat="doss in dosss">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <a href="/forum/dir/{{ doss._id }}">
+                    <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> {{ doss.titre }}
+                </a>
+            </h3>
+        </div>
+        <div class="panel-body">
+            <!-- <strong>Date : </strong>{{ doss.date }}<br/> -->
+            <button ng-if="session.canDelDoss" type="button" class="btn btn-danger" ng-click="deleteDoss($index)">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Supprimer
+            </button>
+        </div>
+    </div>
+    <div class="form-group" ng-if="session.canAddDoss">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <input type="text" class="form-control" placeholder="Titre du dossier" ng-model="formDoss.titre" />
+                </h3>
+            </div>
+            <div class="panel-body">
+                <button type="submit" class="btn btn-primary" aria-label="Ajouter" ng-click="createDoss()">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ajouter
+                </button>
+            </div>
+        </div>
+    </div>
+    <h2>Conversations</h2>
     <div class="panel panel-default" ng-repeat="conv in convs">
         <div class="panel-heading">
-            <a href="/forum/conv/{{ conv._id }}">
-                <h3 class="panel-title">{{ conv.titre }}</h3>
-            </a>
+            <h3 class="panel-title">
+                <a href="/forum/conv/{{ conv._id }}">
+                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> {{ conv.titre }}
+                </a>
+            </h3>
         </div>
         <div class="panel-body">
             <!-- <strong>Date : </strong>{{ conv.date }}<br/> -->
@@ -21,18 +55,18 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">
-                    <input type="text" class="form-control" placeholder="Titre" ng-model="formData.titre" />
+                    <input type="text" class="form-control" placeholder="Titre de la conversation" ng-model="formConv.titre" />
                 </h3>
             </div>
             <div class="panel-body">
-                <textarea class="form-control" rows="3"></textarea>
+                <!-- <textarea class="form-control" rows="3"></textarea> -->
                 <button type="submit" class="btn btn-primary" aria-label="Ajouter" ng-click="createConv()">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ajouter
                 </button>
             </div>
         </div>
     </div>
-    <nav>
+    <!-- <nav>
         <ul class="pagination">
             <li>
                 <a href="#" aria-label="Previous">
@@ -50,5 +84,5 @@
                 </a>
             </li>
         </ul>
-    </nav>
+    </nav> -->
 </div>
