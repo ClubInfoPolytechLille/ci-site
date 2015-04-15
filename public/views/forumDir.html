@@ -16,12 +16,12 @@
         </div>
         <div class="panel-body">
             <!-- <strong>Date : </strong>{{ doss.date }}<br/> -->
-            <button ng-if="session.canDelDoss" type="button" class="btn btn-danger" ng-click="deleteDoss($index)">
+            <button ng-show="session.canDelDoss" type="button" class="btn btn-danger" ng-click="deleteDoss($index)">
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Supprimer
             </button>
         </div>
     </div>
-    <div class="form-group" ng-if="session.canAddDoss">
+    <div class="form-group" ng-show="session.canAddDoss">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">
@@ -46,12 +46,12 @@
         </div>
         <div class="panel-body">
             <!-- <strong>Date : </strong>{{ conv.date }}<br/> -->
-            <button ng-if="session.canDelConv" type="button" class="btn btn-danger" ng-click="deleteConv($index)">
+            <button ng-show="session.canDelConv" type="button" class="btn btn-danger" ng-click="deleteConv($index)">
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Supprimer
             </button>
         </div>
     </div>
-    <div class="form-group" ng-if="session.canAddConv">
+    <div class="form-group" ng-show="session.canAddConv">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">

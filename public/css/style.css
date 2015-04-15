@@ -12,7 +12,7 @@ body {
 
 [ng-repeat].ng-enter {
     -webkit-animation: fadeInRight 0.5s;
-    animation: fadeInLeft 0.5s;
+    animation: fadeInRight 0.5s;
 }
 
 [ng-repeat].ng-leave {
@@ -20,14 +20,14 @@ body {
     animation: fadeOutLeft 0.5s;
 }
 
-[ng-if].ng-enter {
+[ng-if].ng-enter, [ng-show].ng-enter, [ng-hide].ng-enter {
     -webkit-animation: zoomIn 0.5s;
-    animation: fadeInLeft 0.5s;
+    animation: zoomIn 0.5s;
 }
 
-[ng-if].ng-leave {
+[ng-if].ng-leave, [ng-show].ng-leave, [ng-hide].ng-leave {
     -webkit-animation: zoomOut 0.5s;
-    animation: fadeOutLeft 0.5s;
+    animation: zoomOut 0.5s;
 }
 
 body > .container {
@@ -48,16 +48,6 @@ body > .container > .ng-leave {
 
 table {
     width: 90%;
-}
-
-table .ng-enter {
-    -webkit-animation: fadeInLeft 0.5s;
-    animation: fadeInLeft 0.5s;
-}
-
-table .ng-leave {
-    -webkit-animation: fadeOutLeft 0.5s;
-    animation: fadeOutLeft 0.5s;
 }
 
 .bureau {

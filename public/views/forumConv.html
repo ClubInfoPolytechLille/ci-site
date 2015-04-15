@@ -8,14 +8,14 @@
     <div class="panel panel-default" ng-repeat="mess in messs">
         <div class="panel-heading">
             {{ mess.login }}
-            <button ng-if="session.canDelMess" type="button" class="btn btn-danger" ng-click="deleteMess($index)">
+            <button ng-show="session.canDelMess" type="button" class="btn btn-danger" ng-click="deleteMess($index)">
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Supprimer
             </button>
         </div>
         <div class="panel-body" btf-markdown="mess.content">
         </div>
     </div>
-    <div class="form-group" ng-if="session.canAddMess">
+    <div class="form-group" ng-show="session.canAddMess">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
