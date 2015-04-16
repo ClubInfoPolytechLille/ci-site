@@ -108,7 +108,7 @@ api.use(session({
     }),
     name: 'membreCool',
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     secret: fs.readFileSync('config/session_secret', {
         encoding: 'UTF8'
     })
