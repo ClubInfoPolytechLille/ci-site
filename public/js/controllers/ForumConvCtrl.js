@@ -12,23 +12,25 @@ angular.module('ForumConvCtrl', ['SessionsServ', 'ApiServ', 'ngSanitize', 'btfor
             if (!err) {
                 $scope.conv = conv;
                 ApiServ("récupération des messages", 'get', 'messs', conv._id, function (err, messs) {
-                    if (!err)
+                    if (!err) {
                         $scope.messs = messs;
+                    }
                 });
             }
         });
 
-        $scope.createMess = function () {
+        $scope.addMess = function () {
             data = $scope.formData;
             data.conv = $scope.conv._id;
             ApiServ("envoi du message", 'post', 'messs', data, function (err, mess) {
-                if (!err)
+                if (!err) {
                     $scope.formData = {};
-                $scope.messs.push(mess);
+                    $scope.messs.push(mess);
+                }
             });
         };
 
-        $scope.deleteMess = function (index) {
+        $scope.delMess = function (index) {
             ApiServ("suppression du message", 'delete', 'messs', $scope.messs[index]._id, function (err) {
                 if (!err)
                     $scope.messs.splice(index, 1);

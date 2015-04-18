@@ -1,35 +1,54 @@
 <div class="container">
     <ol class="breadcrumb">
         <li><a href="/forum">Forum</a></li>
-        <li><a href="#">Conversations</a></li>
+        <li>Conversations</li>
         <li class="active">{{ conv.titre }}</li>
     </ol>
     <h1>{{ conv.titre }}</h1>
-    <div class="panel panel-default" ng-repeat="mess in messs">
-        <div class="panel-heading">
-            {{ mess.login }}
-            <button ng-show="session.canDelMess" type="button" class="btn btn-danger" ng-click="deleteMess($index)">
-                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Supprimer
-            </button>
-        </div>
-        <div class="panel-body" btf-markdown="mess.content">
-        </div>
-    </div>
-    <div class="form-group" ng-show="session.canAddMess">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    Nouveau message
-                </h4>
-            </div>
-            <div class="panel-body">
-                <textarea class="form-control" rows="3" ng-model="formData.content"></textarea>
-                <button type="submit" class="btn btn-primary" aria-label="Ajouter" ng-click="createMess()">
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ajouter
-                </button>
-            </div>
-        </div>
-    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Détails</th>
+                <th>Message</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="mess in messs">
+                <td>
+                    {{ mess.auteur.image }}
+                    <br />
+                    <span class=".visible-xs">{{ mess.auteur.login }}</span>
+                    <span class=".hidden-xs">{{ mess.auteur.nom }}</span>
+                    <br/> {{ mess.auteur.section }}
+                    <br/> {{ mess.auteur.role }}
+                    <br/> {{ doss.date }}
+                </td>
+                <td btf-markdown="mess.content">
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger" ng-show="session.canDelMess" ng-click="delMess($index)">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </button>
+                </td>
+            </tr>
+            <tr ng-show="session.canAddMess">
+                <form>
+                    <td>
+                        <label for="nvMessTitre">Nouveau message</label>
+                    </td>
+                    <td class="form-group">
+                        <textarea class="form-control" id="nvMessTitre" rows="7" placeholder="Contenu du message" ng-model="formData.content"></textarea>
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-primary" ng-class="{disabled: !formData.content}" ng-click="addMess()">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </form>
+            </tr>
+        </tbody>
+    </table>
     <!-- <nav>
         <ul class="pagination">
             <li>

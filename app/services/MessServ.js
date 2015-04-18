@@ -6,6 +6,8 @@ var async = require('async');
 var MesssServ = {};
 
 MesssServ.addData = function (mess, cb) {
+    mess.auteur = {};
+    mess.auteur.nom = mess.login;
     // PolyUserServ.get(Mess.login, function (err, nom) {
     //     if (nom) {
     //         Mess.nom = nom;

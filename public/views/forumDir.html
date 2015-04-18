@@ -1,71 +1,106 @@
 <div class="container">
     <ol class="breadcrumb">
         <li><a href="/forum">Forum</a></li>
-        <li><a href="#">Dossiers</a></li>
-        <li class="active">{{ dossier.titre }}</li>
+        <li>Dossiers</li>
+        <li class="active">{{ doss.titre }}</li>
     </ol>
     <h1>{{ doss.titre }}</h1>
-    <h2>Dossiers</h2>
-    <div class="panel panel-default" ng-repeat="doss in dosss">
-        <div class="panel-heading">
-            <h3 class="panel-title">
-                <a href="/forum/dir/{{ doss._id }}">
-                    <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> {{ doss.titre }}
-                </a>
-            </h3>
-        </div>
-        <div class="panel-body">
-            <!-- <strong>Date : </strong>{{ doss.date }}<br/> -->
-            <button ng-show="session.canDelDoss" type="button" class="btn btn-danger" ng-click="deleteDoss($index)">
-                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Supprimer
-            </button>
-        </div>
-    </div>
-    <div class="form-group" ng-show="session.canAddDoss">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    <input type="text" class="form-control" placeholder="Titre du dossier" ng-model="formDoss.titre" />
-                </h3>
-            </div>
-            <div class="panel-body">
-                <button type="submit" class="btn btn-primary" aria-label="Ajouter" ng-click="createDoss()">
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ajouter
-                </button>
-            </div>
-        </div>
-    </div>
-    <h2>Conversations</h2>
-    <div class="panel panel-default" ng-repeat="conv in convs">
-        <div class="panel-heading">
-            <h3 class="panel-title">
-                <a href="/forum/conv/{{ conv._id }}">
-                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> {{ conv.titre }}
-                </a>
-            </h3>
-        </div>
-        <div class="panel-body">
-            <!-- <strong>Date : </strong>{{ conv.date }}<br/> -->
-            <button ng-show="session.canDelConv" type="button" class="btn btn-danger" ng-click="deleteConv($index)">
-                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Supprimer
-            </button>
-        </div>
-    </div>
-    <div class="form-group" ng-show="session.canAddConv">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    <input type="text" class="form-control" placeholder="Titre de la conversation" ng-model="formConv.titre" />
-                </h3>
-            </div>
-            <div class="panel-body">
-                <!-- <textarea class="form-control" rows="3"></textarea> -->
-                <button type="submit" class="btn btn-primary" aria-label="Ajouter" ng-click="createConv()">
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ajouter
-                </button>
-            </div>
-        </div>
-    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Auteur</th>
+                <th>Dernier message</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="doss in dosss">
+                <td>
+                    <a href="/forum/dir/{{ doss._id }}">
+                        <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
+                        {{ doss.titre }}
+                    </a>
+                    <span class="badge" ng-hide="doss.new">{{ doss.new }}</span>
+                </td>
+                <td>
+                    <span class=".visible-xs">{{ doss.auteur.login }}</span>
+                    <span class=".hidden-xs">{{ doss.auteur.nom }}</span>
+                </td>
+                <td>
+                    {{ doss.date }}
+                </td>
+                <td>
+                    <button type="button" class="btn btn-default" ng-show="session.canAbonner">
+                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true" ng-show="doss.abonne"></span>
+                        <span class="glyphicon glyphicon-eye-close" aria-hidden="true" ng-hide="doss.abonne"></span>
+                    </button>
+                    <button type="button" class="btn btn-danger" ng-show="session.canDelDoss" ng-click="delDoss($index)">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </button>
+                </td>
+            </tr>
+            <tr ng-show="session.canAddDoss">
+                <form>
+                    <td class="form-group">
+                        <label for="nvDossTitre">Nouveau dossier</label>
+                        <input type="text" class="form-control" id="nvDossTitre" placeholder="Nom du dossier" ng-model="formDoss.titre" />
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-primary" ng-class="{disabled: !formDoss.titre}" ng-click="addDoss()">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </form>
+            </tr>
+            <tr ng-repeat="conv in convs">
+                <td>
+                    <a href="/forum/conv/{{ conv._id }}">
+                        <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                        {{ conv.titre }}
+                    </a>
+                    <span class="badge" ng-hide="conv.new">{{ conv.new }}</span>
+                </td>
+                <td>
+                    <span class=".visible-xs">{{ conv.auteur.login }}</span>
+                    <span class=".hidden-xs">{{ conv.auteur.nom }}</span>
+                </td>
+                <td>
+                    {{ conv.date }}
+                </td>
+                <td>
+                    <button type="button" class="btn btn-default" ng-show="session.canAbonner">
+                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true" ng-show="conv.abonne"></span>
+                        <span class="glyphicon glyphicon-eye-close" aria-hidden="true" ng-hide="conv.abonne"></span>
+                    </button>
+                    <button type="button" class="btn btn-danger" ng-show="session.canDelConv" ng-click="delConv($index)">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </button>
+                </td>
+            </tr>
+            <tr ng-show="session.canAddConv">
+                <form>
+                    <td class="form-group">
+                        <label for="nvConvTitre">Nouvelle conversation</label>
+                        <input type="text" class="form-control" id="nvConvTitre" placeholder="Nom de la conversation" ng-model="formConv.titre" />
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-primary" ng-class="{disabled: !formConv.titre}" ng-click="addConv()">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </form>
+            </tr>
+        </tbody>
+    </table>
     <!-- <nav>
         <ul class="pagination">
             <li>
