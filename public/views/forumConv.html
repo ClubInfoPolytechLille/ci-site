@@ -24,24 +24,28 @@
                     <br/> {{ mess.auteur.role }}
                     <br/> {{ doss.date }}
                 </td>
-                <td btf-markdown="mess.content">
-                </td>
+                <!-- <td btf-markdown="mess.content"></td> -->
+                <td mess-edit></td>
                 <td>
+                    <mess-viewsource></mess-viewsource>
+                    <button type="button" class="btn btn-primary" ng-show="session.canEditMess" ng-click="editButton($index)">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true" ng-hide="mess.editMode"></span>
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true" ng-show="mess.editMode"></span>
+                    </button>
                     <button type="button" class="btn btn-danger" ng-show="session.canDelMess" ng-click="delMess($index)">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     </button>
                 </td>
             </tr>
             <tr ng-show="session.canAddMess">
-                <form>
+                <form ng-init="mess = {content: '', editMode: true, viewSource: true}">
                     <td>
                         <label for="nvMessTitre">Nouveau message</label>
                     </td>
-                    <td class="form-group">
-                        <textarea class="form-control" id="nvMessTitre" rows="7" placeholder="Contenu du message" ng-model="formData.content"></textarea>
-                    </td>
+                    <td mess-edit></td>
                     <td>
-                        <button type="submit" class="btn btn-primary" ng-class="{disabled: !formData.content}" ng-click="addMess()">
+                        <mess-viewsource></mess-viewsource>
+                        <button type="submit" class="btn btn-primary" ng-class="{disabled: !mess.content}" ng-click="addMess()">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         </button>
                     </td>

@@ -1,4 +1,4 @@
-angular.module('ForumConvCtrl', ['SessionsServ', 'ApiServ', 'ngSanitize', 'btford.markdown'])
+angular.module('ForumConvCtrl', ['SessionsServ', 'ApiServ', 'MessEditDrct'])
     .controller('ForumConvCtrl', function ($scope, $routeParams, SessionServ, ApiServ) {
         $scope.messs = [];
         $scope.conv = {};
@@ -20,8 +20,10 @@ angular.module('ForumConvCtrl', ['SessionsServ', 'ApiServ', 'ngSanitize', 'btfor
         });
 
         $scope.addMess = function () {
-            data = $scope.formData;
-            data.conv = $scope.conv._id;
+            data = {
+                content: $scope.mess.content,
+                conv: $scope.conv._id
+            };
             ApiServ("envoi du message", 'post', 'messs', data, function (err, mess) {
                 if (!err) {
                     $scope.formData = {};
@@ -35,6 +37,17 @@ angular.module('ForumConvCtrl', ['SessionsServ', 'ApiServ', 'ngSanitize', 'btfor
                 if (!err)
                     $scope.messs.splice(index, 1);
             });
+        };
+
+        $scope.editButton = function (index) {
+            mess = $scope.messs[index];
+            if (mess.editMode) {
+                mess.viewSource = false;
+                console.log('Submit edition');
+            } else {
+                mess.viewSource = true;
+            }
+            mess.editMode = !mess.editMode;
         };
 
     });

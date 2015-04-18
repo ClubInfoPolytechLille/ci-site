@@ -36,6 +36,16 @@ body {
     animation: zoomOut 0.5s;
 }
 
+[mess-edit] .ng-enter {
+    -webkit-animation: flipInY 0.5s;
+    animation: flipInY 0.5s;
+}
+
+[mess-edit] .ng-leave {
+    -webkit-animation: flipOutY 0.5s;
+    animation: flipOutY 0.5s;
+}
+
 body > .container {
     position: relative;
 }

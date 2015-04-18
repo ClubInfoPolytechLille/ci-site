@@ -91,12 +91,13 @@ sessionData = function (session, cb) {
             // Permissions
             session.canAddMembre = session.bureau;
             session.canDelMembre = session.bureau;
+            session.canAddDoss = session.bureau;
+            session.canDelDoss = session.bureau;
             session.canAddConv = true;
             session.canDelConv = session.bureau;
             session.canAddMess = true;
+            session.canEditMess = false;
             session.canDelMess = session.bureau;
-            session.canAddDoss = session.bureau;
-            session.canDelDoss = session.bureau;
             cb(session);
         });
     });
