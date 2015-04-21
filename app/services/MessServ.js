@@ -56,6 +56,22 @@ MesssServ.add = function (data, cb) {
     });
 };
 
+MesssServ.edit = function (data, cb) {
+    MessModl.findById(data._id, function (err, mess) {
+        if (err) {
+            cb(err);
+        } else {
+            if (mess) {
+                mess.content = data.content;
+                // TODO Edit date
+                mess.save(cb);
+            } else {
+                cb('notfound');
+            }
+        }
+    });
+};
+
 MesssServ.remove = function (id, cb) {
     // TODO Trash
     MessModl.remove({

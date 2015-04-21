@@ -42,12 +42,19 @@ angular.module('ForumConvCtrl', ['SessionsServ', 'ApiServ', 'MessEditDrct'])
         $scope.editButton = function (index) {
             mess = $scope.messs[index];
             if (mess.editMode) {
-                mess.viewSource = false;
-                console.log('Submit edition');
+                ApiServ("édition du message", 'put', 'messs', mess, function (err, data) {
+                    if (!err) {
+                        console.log(data);
+                        mess.content = data.content;
+                        mess.editDate = data.editDate;
+                        mess.editMode = false;
+                        mess.viewSource = false;
+                    }
+                });
             } else {
+                mess.editMode = true;
                 mess.viewSource = true;
             }
-            mess.editMode = !mess.editMode;
         };
 
     });

@@ -96,7 +96,7 @@ sessionData = function (session, cb) {
             session.canAddConv = true;
             session.canDelConv = session.bureau;
             session.canAddMess = true;
-            session.canEditMess = false;
+            session.canEditMess = session.bureau;
             session.canDelMess = session.bureau;
             cb(session);
         });
@@ -298,6 +298,21 @@ api.post('/messs', reqPerm('canAddMess'), function (req, res) { // Ajout d'un me
             res.status(500).send(err);
         else
             res.json(mess);
+    });
+});
+
+api.put('/messs', reqPerm('canEditMess'), function (req, res) { // Édition d'un message
+    MessServ.edit(req.body, function (err, mess) {
+        console.log('CALLED', err, mess);
+        if (err) {
+            if (err == 'notfound') {
+                res.status(404).end();
+            } else {
+                res.status(500).json(err);
+            }
+        } else {
+            res.status(201).json(mess);
+        }
     });
 });
 
