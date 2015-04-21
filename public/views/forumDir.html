@@ -31,16 +31,16 @@
                     {{ doss.date }}
                 </td>
                 <td>
-                    <button type="button" class="btn btn-default" ng-show="session.canAbonner">
+                    <button type="button" class="btn btn-default" ng-show="session.membre && implemented">
                         <span class="glyphicon glyphicon-eye-open" aria-hidden="true" ng-show="doss.abonne"></span>
                         <span class="glyphicon glyphicon-eye-close" aria-hidden="true" ng-hide="doss.abonne"></span>
                     </button>
-                    <button type="button" class="btn btn-danger" ng-show="session.canDelDoss" ng-click="delDoss($index)">
+                    <button type="button" class="btn btn-danger" ng-show="mine(doss)" ng-click="delDoss($index)">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     </button>
                 </td>
             </tr>
-            <tr ng-show="session.canAddDoss">
+            <tr ng-show="session.membre">
                 <form>
                     <td class="form-group">
                         <label for="nvDossTitre">Nouveau dossier</label>
@@ -73,16 +73,16 @@
                     {{ conv.date }}
                 </td>
                 <td>
-                    <button type="button" class="btn btn-default" ng-show="session.canAbonner">
+                    <button type="button" class="btn btn-default" ng-show="session.membre && implemented">
                         <span class="glyphicon glyphicon-eye-open" aria-hidden="true" ng-show="conv.abonne"></span>
                         <span class="glyphicon glyphicon-eye-close" aria-hidden="true" ng-hide="conv.abonne"></span>
                     </button>
-                    <button type="button" class="btn btn-danger" ng-show="session.canDelConv" ng-click="delConv($index)">
+                    <button type="button" class="btn btn-danger" ng-show="mine(conv)" ng-click="delConv($index)">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     </button>
                 </td>
             </tr>
-            <tr ng-show="session.canAddConv">
+            <tr ng-show="session.membre">
                 <form>
                     <td class="form-group">
                         <label for="nvConvTitre">Nouvelle conversation</label>

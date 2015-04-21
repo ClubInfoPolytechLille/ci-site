@@ -28,16 +28,16 @@
                 <td mess-edit></td>
                 <td>
                     <mess-viewsource></mess-viewsource>
-                    <button type="button" class="btn btn-primary" ng-show="session.canEditMess" ng-click="editButton($index)">
+                    <button type="button" class="btn btn-primary" ng-show="mine(mess)" ng-click="editButton($index)">
                         <span class="glyphicon glyphicon-edit" aria-hidden="true" ng-hide="mess.editMode"></span>
                         <span class="glyphicon glyphicon-ok" aria-hidden="true" ng-show="mess.editMode"></span>
                     </button>
-                    <button type="button" class="btn btn-danger" ng-show="session.canDelMess" ng-click="delMess($index)">
+                    <button type="button" class="btn btn-danger" ng-show="mine(mess)" ng-click="delMess($index)">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     </button>
                 </td>
             </tr>
-            <tr ng-show="session.canAddMess">
+            <tr ng-show="session.membre">
                 <form ng-init="mess = {content: '', editMode: true, viewSource: true}">
                     <td>
                         <label for="nvMessTitre">Nouveau message</label>

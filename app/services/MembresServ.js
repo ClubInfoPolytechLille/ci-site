@@ -46,6 +46,18 @@ MembresServ.remove = function (id, cb) {
     }, cb);
 };
 
+MembresServ.estMembre = function (login, cb) {
+    MembreModl.findOne({
+        login: login
+    }, function (err, data) {
+        if (!err && data) {
+            cb(true);
+        } else {
+            cb(false);
+        }
+    });
+};
+
 MembresServ.estBureau = function (login, cb) {
     MembreModl.findOne({
         login: login

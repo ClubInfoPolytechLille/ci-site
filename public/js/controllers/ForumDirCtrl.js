@@ -59,4 +59,8 @@ angular.module('ForumDirCtrl', ['SessionsServ', 'ApiServ'])
             });
         };
 
+        $scope.mine = function (obj) {
+            return $scope.session.bureau;
+        };
+
     });

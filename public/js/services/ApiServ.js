@@ -13,7 +13,7 @@ angular.module('ApiServ', ['NotifyServ'])
                 };
             }
 
-            if (method == 'get' || method == 'delete') {
+            if (method == 'get' || method == 'delete') { // TODO url & data en même temps
                 for (arg = 3; arg < arglen; arg++) {
                     link += '/' + arguments[arg];
                 }

@@ -57,4 +57,8 @@ angular.module('ForumConvCtrl', ['SessionsServ', 'ApiServ', 'MessEditDrct'])
             }
         };
 
+        $scope.mine = function (mess) {
+            return $scope.session.bureau || mess.login == $scope.session.login;
+        };
+
     });
