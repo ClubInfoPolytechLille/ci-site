@@ -10,7 +10,7 @@ angular.module('ForumDirCtrl', ['SessionsServ', 'ApiServ'])
             $scope.session = SessionServ.cur;
         });
 
-        ApiServ("récupération du dossier", 'get', 'dosss', $routeParams.doss_id, function (err, doss) {
+        ApiServ("récupération du dossier", 'get', ['dosss', $routeParams.doss_id], null, function (err, doss) {
             if (err) {
                 console.error(err);
             } else {
@@ -24,7 +24,6 @@ angular.module('ForumDirCtrl', ['SessionsServ', 'ApiServ'])
 
         // Dossiers
         $scope.addDoss = function () {
-            console.log('CALLA');
             $scope.formDoss.parent = $routeParams.doss_id;
             ApiServ("création du dossier", 'post', 'dosss', $scope.formDoss, function (err, doss) {
                 if (!err) {
@@ -35,7 +34,7 @@ angular.module('ForumDirCtrl', ['SessionsServ', 'ApiServ'])
         };
 
         $scope.delDoss = function (index) {
-            ApiServ("suppression du dossier", 'delete', 'dosss', $scope.dosss[index]._id, function (err) {
+            ApiServ("suppression du dossier", 'delete', ['dosss', $scope.dosss[index]._id], null, function (err) {
                 if (!err)
                     $scope.dosss.splice(index, 1);
             });
@@ -53,7 +52,7 @@ angular.module('ForumDirCtrl', ['SessionsServ', 'ApiServ'])
         };
 
         $scope.delConv = function (index) {
-            ApiServ("suppression de la conversation", 'delete', 'convs', $scope.convs[index]._id, function (err) {
+            ApiServ("suppression de la conversation", 'delete', ['convs', $scope.convs[index]._id], null, function (err) {
                 if (!err)
                     $scope.convs.splice(index, 1);
             });

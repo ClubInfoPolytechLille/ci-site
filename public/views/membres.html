@@ -10,7 +10,7 @@
                 <th>Nom</th>
                 <th>Section</th>
                 <th>Rôle</th>
-                <th ng-show="session.canAddMembre || session.canDelMembre">Action</th>
+                <th ng-show="session.bureau">Action</th>
             </tr>
         </thead>
         <tbody as-sortable="dragControlListeners" ng-model="membres">
@@ -18,7 +18,7 @@
                 <td>{{ membre.nom }}</td>
                 <td>{{ membre.section }}</td>
                 <td>{{ membre.role }}</td>
-                <td ng-show="session.canDelMembre">
+                <td ng-show="session.bureau">
                     <button type="button" class="btn btn-default" aria-label="Déplacer" data-as-sortable-item-handle>
                         <span class="glyphicon glyphicon-resize-vertical" aria-hidden="true"></span>
                     </button>
@@ -28,7 +28,7 @@
                 </td>
             </tr>
         </tbody>
-        <tfoot id="membre-form" ng-show="session.canAddMembre">
+        <tfoot id="membre-form" ng-show="session.bureau">
             <tr class="form-group">
                 <td>
                     <input type="text" class="form-control input-lg" placeholder="Login Polytech" ng-model="formData.login">

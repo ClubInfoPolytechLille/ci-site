@@ -8,7 +8,7 @@ angular.module('MembreCtrl', ['SessionsServ', 'ApiServ', 'ui.sortable'])
             $scope.session = SessionServ.cur;
         });
 
-        ApiServ("récupération de la liste des membres", 'get', 'membres', function (err, membres) {
+        ApiServ("récupération de la liste des membres", 'get', 'membres', null, function (err, membres) {
             if (!err)
                 $scope.membres = membres;
         });
@@ -29,7 +29,7 @@ angular.module('MembreCtrl', ['SessionsServ', 'ApiServ', 'ui.sortable'])
         };
 
         $scope.deleteMembre = function (index) {
-            ApiServ("création du membre", 'delete', 'membres', $scope.membres[index]._id, function (err, data) {
+            ApiServ("création du membre", 'delete', ['membres', $scope.membres[index]._id], null, function (err, data) {
                 if (!err) {
                     $scope.membres.splice(index, 1);
                 }

@@ -8,10 +8,10 @@ angular.module('ForumConvCtrl', ['SessionsServ', 'ApiServ', 'MessEditDrct'])
         SessionServ.onChange(function () {
             $scope.session = SessionServ.cur;
         });
-        ApiServ("récupération de la conversation", 'get', 'convs', $routeParams.conv_id, function (err, conv) {
+        ApiServ("récupération de la conversation", 'get', ['convs', $routeParams.conv_id], null, function (err, conv) {
             if (!err) {
                 $scope.conv = conv;
-                ApiServ("récupération des messages", 'get', 'messs', conv._id, function (err, messs) {
+                ApiServ("récupération des messages", 'get', ['messs', conv._id], null, function (err, messs) {
                     if (!err) {
                         $scope.messs = messs;
                     }
@@ -33,7 +33,7 @@ angular.module('ForumConvCtrl', ['SessionsServ', 'ApiServ', 'MessEditDrct'])
         };
 
         $scope.delMess = function (index) {
-            ApiServ("suppression du message", 'delete', 'messs', $scope.messs[index]._id, function (err) {
+            ApiServ("suppression du message", 'delete', ['messs', $scope.messs[index]._id], null, function (err) {
                 if (!err)
                     $scope.messs.splice(index, 1);
             });
@@ -42,9 +42,10 @@ angular.module('ForumConvCtrl', ['SessionsServ', 'ApiServ', 'MessEditDrct'])
         $scope.editButton = function (index) {
             mess = $scope.messs[index];
             if (mess.editMode) {
-                ApiServ("édition du message", 'put', 'messs', mess, function (err, data) {
+                ApiServ("édition du message", 'put', ['messs', mess._id], {
+                    content: mess.content
+                }, function (err, data) {
                     if (!err) {
-                        console.log(data);
                         mess.content = data.content;
                         mess.editDate = data.editDate;
                         mess.editMode = false;

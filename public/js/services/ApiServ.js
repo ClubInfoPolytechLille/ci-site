@@ -1,27 +1,20 @@
 angular.module('ApiServ', ['NotifyServ'])
     .service('ApiServ', function ($http, NotifyServ) {
-        return function (name, method, href) {
-            var cb;
-            link = '/api/' + href;
-            arglen = arguments.length;
-            if (typeof arguments[arglen - 1] == 'function') {
-                cb = arguments[arglen - 1];
-                arglen--;
-            } else {
+        return function (name, method, params, data, cb) {
+            if (!cb) {
                 cb = function () {
                     return undefined;
                 };
             }
 
-            if (method == 'get' || method == 'delete') { // TODO url & data en même temps
-                for (arg = 3; arg < arglen; arg++) {
-                    link += '/' + arguments[arg];
-                }
-                request = $http[method](link);
-            } else {
-                request = $http[method](link, arguments[3]);
+            link = '/api';
+            if (typeof params == 'string') {
+                params = [params];
             }
-            request
+            for (var param in params) {
+                link += '/' + params[param];
+            }
+            $http[method](link, data)
                 .success(function (data) {
                     cb(null, data);
                 })
