@@ -1,0 +1,16 @@
+<div class="container">
+    <h1>Profil de {{ session.nom }}</h1>
+    <p>
+        <strong>Login : </strong>{{ session.login }}
+    </p>
+    <p>
+        <strong>Section : </strong>{{ session.section }}
+    </p>
+    <p>
+        <strong>Rôle : </strong>
+        <span ng-class="{bureau: session.bureau}">{{ session.role }}</span>
+    </p>
+    <button type="button" class="btn btn-warning" aria-label="Se déconnecter" ng-click="disconnect()">
+        <span class="glyphicon glyphicon-off" aria-hidden="true"></span> Se déconnecter
+    </button>
+</div>

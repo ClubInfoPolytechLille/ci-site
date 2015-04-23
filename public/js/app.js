@@ -1,4 +1,4 @@
-angular.module('ciApp', ['ngAnimate', 'ngRoute', 'ConnectCtrl', 'MembreCtrl', 'ForumDirCtrl', 'ForumConvCtrl', 'SessionsCtrl']).config(function ($routeProvider, $locationProvider) {
+angular.module('ciApp', ['ngAnimate', 'ngRoute', 'ConnectCtrl', 'MembreCtrl', 'ForumDirCtrl', 'ForumConvCtrl', 'SessionsCtrl', 'ProfileCtrl']).config(function ($routeProvider, $locationProvider) {
     $routeProvider
         .when('/', {
             templateUrl: 'views/home.html'
@@ -21,6 +21,10 @@ angular.module('ciApp', ['ngAnimate', 'ngRoute', 'ConnectCtrl', 'MembreCtrl', 'F
         .when('/connect', {
             templateUrl: 'views/connect.html',
             controller: 'ConnectCtrl'
+        })
+        .when('/profile', {
+            templateUrl: 'views/profile.html',
+            controller: 'ProfileCtrl'
         })
         .otherwise({
             redirectTo: '/'
