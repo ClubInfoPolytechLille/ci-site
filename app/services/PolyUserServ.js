@@ -4,7 +4,9 @@ var Client = require('ssh2').Client;
 var creds = require('../../config/sshAuth');
 var NodeCache = require("node-cache");
 
-var cache = new NodeCache();
+var cache = new NodeCache({
+    stdTTL: 24 * 60 * 60
+});
 
 var PolyUserServ = {};
 
@@ -125,10 +127,10 @@ PolyUserServ.get = function (login, cb) {
         if (err) {
             cb(err);
         } else {
-            if (data[login] === undefined) {
-                PolyUserServ.add(login, cb);
+            if (data) {
+                cb(null, data);
             } else {
-                cb(null, data[login]);
+                PolyUserServ.add(login, cb);
             }
         }
     });
