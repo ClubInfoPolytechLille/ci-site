@@ -12,7 +12,6 @@
     "express-session": "^1.11.1",
     "mongoose": "^4.0.2",
     "node-cache": "^2.1.1",
-    "node-line-reader": "0.0.2",
     "serve-favicon": "^2.2.0",
     "ssh2": "^0.4.6",
     "ursa": "^0.8.4"
