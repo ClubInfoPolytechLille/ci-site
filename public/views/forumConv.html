@@ -14,17 +14,15 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="mess in messs">
-                <td>
+            <tr ng-repeat="mess in conv.messs">
+                <td ng-class="{bureau: mess.auteur.bureau}">
                     {{ mess.auteur.image }}
-                    <br />
-                    <span class=".visible-xs">{{ mess.auteur.login }}</span>
-                    <span class=".hidden-xs">{{ mess.auteur.nom }}</span>
-                    <br/> {{ mess.auteur.section }}
+                    <span class="visible-xs">{{ mess.auteur.login }}</span>
+                    <span class="hidden-xs">{{ mess.auteur.nom }}</span>
                     <br/> {{ mess.auteur.role }}
+                    <span class="hidden-xs"> - {{ mess.auteur.section }}</span>
                     <br/> {{ doss.date }}
                 </td>
-                <!-- <td btf-markdown="mess.content"></td> -->
                 <td mess-edit></td>
                 <td>
                     <mess-viewsource></mess-viewsource>

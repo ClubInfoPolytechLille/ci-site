@@ -8,5 +8,9 @@ module.exports = mongoose.model('Membre', {
     role: {
         type: String,
         default: 'Membre'
+    },
+    hidden: {
+        type: Boolean,
+        default: false
     }
 });

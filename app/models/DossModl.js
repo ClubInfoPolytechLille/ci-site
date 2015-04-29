@@ -12,6 +12,9 @@ module.exports = mongoose.model('Doss', {
     special: {
         type: String,
         default: ''
+    },
+    hidden: {
+        type: Boolean,
+        default: false
     }
-    // TODO Visibilité (brouillon)
 });

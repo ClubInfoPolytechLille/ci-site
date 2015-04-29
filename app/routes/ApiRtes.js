@@ -2,12 +2,10 @@ var MembresServ = require('../services/MembresServ');
 var PolyUserServ = require('../services/PolyUserServ');
 var DecryptServ = require('../services/DecryptServ');
 var DosssServ = require('../services/DosssServ');
-var DossModl = require('../models/DossModl');
 var ConvsServ = require('../services/ConvsServ');
-var ConvModl = require('../models/ConvModl');
 var MessServ = require('../services/MessServ');
-var MessModl = require('../models/MessModl'); // TODO Unfier ce bazar / supprimer Serv
 var fs = require('fs');
+var async = require('async');
 var mongoose = require('mongoose');
 var express = require('express');
 var session = require('express-session');
@@ -32,16 +30,11 @@ ensureOkay = function (res, status, cb) {
     };
 };
 
-giveBackNull = function (res, status) {
+giveNull = function (res, status) {
     // TODO Statut par défaut / optionnel
     // status = 200;
     return ensureOkay(res, 404, function (data) {
-        res.status(status);
-        if (status != 204 && status != 205) {
-            res.json(data);
-        } else {
-            res.end();
-        }
+        res.status(status).end();
     });
 };
 
@@ -61,12 +54,8 @@ giveBack = function (res, status) {
     // TODO Statut par défaut / optionnel
     // status = 200;
     return ensureExists(res, 404, function (data) {
-        res.status(status);
-        if (status != 204 && status != 205) {
-            res.json(data);
-        } else {
-            res.end();
-        }
+
+        res.status(status).json(data);
     });
 };
 
@@ -82,12 +71,9 @@ reqAuth = function (req, res, next) {
 reqVerified = function (verify) { // Assert mais pour les droits (d'où le 403)
     return function (req, res, next) {
         reqAuth(req, res, function () {
-            verify(req, res, function (err, data) {
-                cb = ensureExists(res, 403, function () {
-                    next(); // Si on passe quoi que ce soit à next(), erreur 500
-                });
-                cb(err, data);
-            });
+            verify(req, res, ensureExists(res, 403, function () {
+                next(); // Si on passe quoi que ce soit à next(), erreur 500
+            }));
         });
     };
 };
@@ -129,19 +115,27 @@ decrypt = function () {
 
 
 // Sessions
-
 sessionData = function (session, cb) {
-    PolyUserServ.get(session.login, function (err, nom) {
-        // Nom
-        session.nom = nom.nom;
-        session.section = nom.section;
-        MembresServ.estMembre(session.login, function (membre) { // TODO Asyc
-            session.membre = membre;
-            MembresServ.estBureau(session.login, function (bureau) {
-                session.bureau = bureau;
-                cb(session);
-            });
-        });
+    async.parallel([
+        function (cba) {
+            PolyUserServ.get(session.login, cba);
+        },
+        function (cba) {
+            MembresServ.estMembre(session.login, cba);
+        },
+        function (cba) {
+            MembresServ.estBureau(session.login, cba);
+        }
+    ], function (err, res) {
+        if (err) {
+            cb(err);
+        } else {
+            session.nom = res[0].nom;
+            session.section = res[0].section;
+            session.membre = res[1];
+            session.bureau = res[2];
+            cb(null, session);
+        }
     });
 };
 
@@ -168,16 +162,12 @@ api.post('/session', decrypt(), assert(function (req, res, cb) {
         if (verified) {
             sessionData({
                 login: req.body.login
-            }, function (session) {
+            }, ensureOkay(res, 500, function (session) {
                 req.session.data = session;
-                req.session.save(function (err) {
-                    if (err) {
-                        res.status(500).json(err);
-                    } else {
-                        res.status(201).json(session);
-                    }
-                });
-            });
+                req.session.save(ensureOkay(res, 500, function () {
+                    res.status(201).json(session);
+                }));
+            }));
         } else {
             req.session.destroy(ensureOkay(res, 500, function () {
                 res.status(401).end();
@@ -191,110 +181,122 @@ api.delete('/session', function (req, res) { // Se déconnecter
     res.status(205).end();
 });
 
-
-// Membres
-api.get('/membres', function (req, res) { // Liste des membres
-    MembresServ.list(giveBack(res, 200));
-});
-
-api.post('/membres', assert(function (req, res, cb) {
-    cb(null, typeof req.body.login == 'string' && req.body.login !== '');
-}), reqBureau, function (req, res) { // Ajout d'un membre
-    MembresServ.add(req.body, giveBack(res, 201));
-});
-
-api.delete('/membres/:membre_id', reqBureau, function (req, res) { // Supression d'un membre
-    MembresServ.remove(req.params.membre_id, giveBack(res, 205));
-});
-
-// Dossiers
-api.get('/dosss/:doss_id', reqAuth, function (req, res) { // Un doss
-    // TODO Assertion 404 existe, transformer req.body.id avec la vraie id (ou redirect)
-    // TODO Requêtes séparées ?
-    // TODO Async
-    DosssServ.get(req.params.doss_id, ensureExists(res, 404, function (doss) {
-        DosssServ.children(doss._id, ensureOkay(res, 500, function (dosss) {
-            ConvsServ.children(doss._id, ensureOkay(res, 500, function (convs) {
-                doss.dosss = dosss;
-                doss.convs = convs;
-                res.json(doss);
-            }));
-        }));
-    }));
-});
-
-api.post('/dosss', reqMembre, function (req, res) { // Ajout d'un doss
-    // TODO Assertion 404 existe, transformer req.body.id avec la vraie id (ou redirect)
-    DosssServ.getId(req.body.parent, function (parent) { // TODO Async
-        req.body.parent = parent;
-        DosssServ.add(req.body, giveBackNull(res, 201));
-    });
-});
-
-api.delete('/dosss/:doss_id', reqBureau, function (req, res) { // Supression d'un doss
-    DosssServ.remove(req.params.doss_id, giveBackNull(res, 205));
-});
-
-// Conversations
-
-getSubject = function (modl) {
-    // TODO Gérer les dossiers
+getSubject = function (serv) { // Fonction générique pour récupérer un objet spécifié dans l'URL
     return function (req, res, next) {
-        modl.findById(req.params._id, ensureExists(res, 404, function (data) {
+        serv.get(req.params._id, ensureExists(res, 404, function (data) {
             req.subject = data;
             next();
         }));
     };
 };
 
-getConv = function (req, res, next) {
-    ConvModl.findById(req.params.conv_id, ensureExists(res, 404, function (data) {
-        req.conv = conv;
+assertSubject = function (serv) {
+    return assert(function (req, res, cb) {
+        serv.assert(req.body, cb);
+    });
+};
+
+addSubject = function (serv) {
+    return function (req, res) {
+
+        serv.add(req.body, ensureExists(res, 404, function (membre) {
+
+            serv.simpleData(membre, giveBack(res, 201));
+        }));
+    };
+};
+
+delSubject = function (serv) {
+    return function (req, res) {
+        serv.remove(req.subject, giveNull(res, 205));
+    };
+};
+
+// Membres
+
+// Liste des membres
+api.get('/membres', function (req, res) {
+    MembresServ.list(ensureExists(res, 404, function (membres) {
+        async.map(membres, MembresServ.simpleData, function (err, data) {
+            giveBack(res, 200)(err, data);
+        });
+    }));
+});
+
+// Ajout d'un membre
+api.post('/membres', reqBureau, assertSubject(MembresServ), function (req, res) {
+
+    MembresServ.add(req.body, ensureExists(res, 404, function (membre) {
+
+        MembresServ.simpleData(membre, giveBack(res, 201));
+    }));
+});
+
+// Supression d'un membre
+api.delete('/membres/:_id', reqBureau, getSubject(MembresServ), delSubject(MembresServ));
+
+
+// Dossiers
+
+parentId = function (req, res, next) {
+    DosssServ.get(req.body.parent, ensureExists(res, 404, function (parent) {
+        req.body.parent = parent._id;
         next();
     }));
 };
 
-api.get('/convs/:_id', reqAuth, getSubject(ConvModl), function (req, res) { // Une conv
-    res.json(req.subject);
+// Un doss
+api.get('/dosss/:_id', reqAuth, getSubject(DosssServ), function (req, res) {
+    DosssServ.detailedData(req.subject, giveBack(res, 200));
 });
 
-// Ajout d'un conv
-api.post('/convs', reqMembre, function (req, res) {
-    // TODO Assertion 404 existe, transformer req.body.id avec la vraie id (ou redirect)
-    DosssServ.getId(req.body.parent, function (parent) { // TODO Async
-        req.body.parent = parent;
-        ConvsServ.add(req.body, giveBack(res, 201));
-    });
+// Ajout d'un doss
+api.post('/dosss', reqMembre, parentId, assertSubject(DosssServ), addSubject(DosssServ));
+
+// Supression d'un doss
+api.delete('/dosss/:_id', reqBureau, getSubject(DosssServ), delSubject(DosssServ));
+
+// Conversations
+
+// Infos sur une conversation
+api.get('/convs/:_id', reqAuth, getSubject(ConvsServ), function (req, res) {
+    ConvsServ.detailedData(req.subject, giveBack(res, 200));
 });
 
-// Supression d'un conv
-api.delete('/convs/:_id', reqBureau, getSubject(ConvModl), function (req, res) {
-    req.subject.remove(giveBack(res, 205));
-});
+// Ajout d'une conversation
+api.post('/convs', reqMembre, parentId, assertSubject(ConvsServ), addSubject(ConvsServ));
+
+// Supression d'une conversation
+api.delete('/convs/:_id', reqBureau, getSubject(ConvsServ), delSubject(ConvsServ));
+
+addLogin = function (req, res, next) {
+    req.body.login = req.session.data.login;
+    next();
+};
 
 // Messages
 
-api.get('/messs/:conv_id', reqAuth, function (req, res) { // Liste des messs
-    MessServ.list(req.params.conv_id, giveBackNull(res, 200));
-});
+// Liste des messs
+// api.get('/messs/:conv_id', reqAuth, function (req, res) {
+//     MessServ.list(req.params.conv_id, ensureExists(res, 404, function (messs) {
+//         async.map(messs, MessServ.simpleData, giveBack(res, 200));
+//     }));
+// });
 
-api.post('/messs', reqMembre, function (req, res) { // Ajout d'un mess
-    data = req.body;
-    data.login = req.session.data.login;
-    MessServ.add(data, giveBack(res, 201));
-});
+// Ajout d'un mess
+api.post('/messs', reqMembre, addLogin, assertSubject(MessServ), addSubject(MessServ));
 
 // Édition d'un mess
-api.put('/messs/:_id', reqMembre, getSubject(MessModl), reqOwn('mess'), function (req, res) {
-    req.subject.content = req.body.content;
-    // TODO Edit date
-    req.subject.save(giveBack(res, 201));
-});
+api.put('/messs/:_id', reqMembre, addLogin, assertSubject(MessServ), getSubject(MessServ), reqOwn('mess'),
+    function (req, res) {
+
+        MessServ.edit(req.subject, req.body, ensureExists(res, 404, function (mess) {
+            MessServ.simpleData(mess, giveBack(res, 201));
+        }));
+    });
 
 // Supression d'un mess
-api.delete('/messs/:_id', reqMembre, getSubject(MessModl), reqOwn('mess'), function (req, res) {
-    req.subject.remove(giveBack(res, 205));
-});
+api.delete('/messs/:_id', reqMembre, getSubject(MessServ), reqOwn('mess'), delSubject(MessServ));
 
 api.all('/coffee', function (req, res) {
     res.status(418).end();

@@ -1,6 +1,5 @@
 angular.module('ForumConvCtrl', ['SessionsServ', 'ApiServ', 'MessEditDrct'])
     .controller('ForumConvCtrl', function ($scope, $routeParams, SessionServ, ApiServ) {
-        $scope.messs = [];
         $scope.conv = {};
         $scope.formData = {};
 
@@ -11,11 +10,6 @@ angular.module('ForumConvCtrl', ['SessionsServ', 'ApiServ', 'MessEditDrct'])
         ApiServ("récupération de la conversation", 'get', ['convs', $routeParams.conv_id], null, function (err, conv) {
             if (!err) {
                 $scope.conv = conv;
-                ApiServ("récupération des messages", 'get', ['messs', conv._id], null, function (err, messs) {
-                    if (!err) {
-                        $scope.messs = messs;
-                    }
-                });
             }
         });
 
@@ -27,23 +21,24 @@ angular.module('ForumConvCtrl', ['SessionsServ', 'ApiServ', 'MessEditDrct'])
             ApiServ("envoi du message", 'post', 'messs', data, function (err, mess) {
                 if (!err) {
                     $scope.formData = {};
-                    $scope.messs.push(mess);
+                    $scope.conv.messs.push(mess);
                 }
             });
         };
 
         $scope.delMess = function (index) {
-            ApiServ("suppression du message", 'delete', ['messs', $scope.messs[index]._id], null, function (err) {
+            ApiServ("suppression du message", 'delete', ['messs', $scope.conv.messs[index]._id], null, function (err) {
                 if (!err)
-                    $scope.messs.splice(index, 1);
+                    $scope.conv.messs.splice(index, 1);
             });
         };
 
         $scope.editButton = function (index) {
-            mess = $scope.messs[index];
+            mess = $scope.conv.messs[index];
             if (mess.editMode) {
                 ApiServ("édition du message", 'put', ['messs', mess._id], {
-                    content: mess.content
+                    content: mess.content,
+                    conv: $scope.conv._id
                 }, function (err, data) {
                     if (!err) {
                         mess.content = data.content;

@@ -1,73 +1,87 @@
 var ConvModl = require('../models/ConvModl');
-// var PolyUserServ = require('../services/PolyUserServ');
+var MessServ = require('../services/MessServ');
 var async = require('async');
 
 var ConvsServ = {};
 
-ConvsServ.addData = function (conv, cb) {
-    // PolyUserServ.get(Conv.login, function (err, nom) {
-    //     if (nom) {
-    //         Conv.nom = nom;
-    //     } else {
-    //         Conv.nom = Conv.login;
-    //     }
-    //     cb(null, Conv);
-    // });
+ConvsServ.simple = ['_id', 'titre', 'parent', 'hidden'];
+
+ConvsServ.simpleData = function (convD, cb) {
     // TODO Démarré par
     // TODO Dernier message
+    var conv = {};
+    for (var prop of ConvsServ.simple) {
+        conv[prop] = convD[prop];
+    }
     cb(null, conv);
 };
 
-ConvsServ.exists = function (id, cb) {
-    ConvModl.findById(id).exec(function (err, conv) {
-        if (err)
+ConvsServ.detailedData = function (convD, cb) {
+    async.parallel([
+        function (cba) {
+            var conv = {};
+            for (var prop of ConvsServ.simple) {
+                conv[prop] = convD[prop];
+            }
+            cba(null, conv);
+        },
+        function (cba) {
+            MessServ.children(convD._id, function (err, children) {
+
+                if (err) {
+                    cba(err);
+                } else {
+                    async.map(children, MessServ.simpleData, cba);
+                }
+            });
+        }
+    ], function (err, res) {
+        if (err) {
             cb(err);
-        else
-            cb(null, true);
+        } else {
+            conv = res[0];
+            conv.messs = res[1];
+
+            cb(null, conv);
+        }
     });
 };
 
 ConvsServ.get = function (id, cb) {
-    ConvModl.findById(id).lean().exec(function (err, conv) {
-        if (err)
-            cb(err);
-        else
-            ConvsServ.addData(conv, cb);
-    });
+    ConvModl.findById(id, cb);
 };
 
-ConvsServ.list = function (cb) { // TODO Visibilité
-    ConvModl.find({}).lean().exec(function (err, Convs) {
-        async.mapSeries(Convs, ConvsServ.addData, cb);
-    });
-};
-
-ConvsServ.children = function (id, cb) {
+ConvsServ.children = function (id, cb) { // Conversations filles du dossier en paramètre
     ConvModl.find({
-        parent: id
-    }).lean().exec(function (err, Conv) {
-        async.mapSeries(Conv, ConvsServ.addData, cb);
-    });
+        parent: id,
+        $or: [{
+            hidden: false
+        }, {
+            hidden: undefined
+        }]
+    }, cb);
+};
+
+ConvsServ.assert = function (conv, cb) {
+    cb(null, conv.titre, conv.parent);
 };
 
 ConvsServ.add = function (data, cb) {
     ConvModl.create({
         titre: data.titre,
         parent: data.parent
-    }, function (err, Conv) {
-        ConvsServ.get(Conv._id, cb);
-    });
-};
-
-ConvsServ.canWriteIn = function (id, login, cb) {
-    ConvsServ.exists(id, cb);
+    }, cb);
 };
 
 ConvsServ.remove = function (id, cb) {
-    // TODO Trash
-    ConvModl.remove({
-        _id: id
-    }, cb);
+    async.waterfall([function (cba) {
+        ConvsServ.get(id, cba);
+    }, function (conv, cba) {
+        cba(conv ? null : 'notfound', conv);
+    }, function (conv, cba) {
+        conv.parent = 'trash';
+        conv.save(cba);
+    }], cb);
 };
 
 module.exports = ConvsServ;

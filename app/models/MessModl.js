@@ -15,5 +15,9 @@ module.exports = mongoose.model('Mess', {
     date: {
         type: Date,
         default: Date.now
+    },
+    hidden: {
+        type: Boolean,
+        default: false
     }
 });

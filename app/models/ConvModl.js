@@ -8,7 +8,9 @@ module.exports = mongoose.model('Conv', {
     parent: {
         type: String,
         default: 'lost'
+    },
+    hidden: {
+        type: Boolean,
+        default: false
     }
-    // TODO Visibilité (brouillon)
-    // TODO Répertoire
 });

@@ -1,82 +1,85 @@
 var MessModl = require('../models/MessModl');
-// var PolyUserServ = require('../services/PolyUserServ');
-var ConvsServ = require('../services/ConvsServ');
+var MembresServ = require('../services/MembresServ');
 var async = require('async');
 
 var MesssServ = {};
 
-MesssServ.addData = function (mess, cb) {
-    mess.auteur = {};
-    mess.auteur.nom = mess.login;
-    // PolyUserServ.get(Mess.login, function (err, nom) {
-    //     if (nom) {
-    //         Mess.nom = nom;
-    //     } else {
-    //         Mess.nom = Mess.login;
-    //     }
-    //     cb(null, Mess);
-    // });
-    cb(null, mess);
-};
+MesssServ.simple = ['_id', 'login', 'content', 'conv', 'date', 'hidden'];
 
-MesssServ.get = function (id, cb) {
-    MessModl.findById(id).lean().exec(function (err, mess) {
-        if (err)
-            cb(err);
-        else
-            MesssServ.addData(mess, cb);
-    });
-};
+MesssServ.simpleData = function (messD, cb) {
 
-MesssServ.list = function (conv, cb) {
-    MessModl.find({
-        conv: conv
-    }).lean().exec(function (err, Messs) {
-        async.mapSeries(Messs, MesssServ.addData, cb);
-    });
-};
-
-MesssServ.add = function (data, cb) {
-    ConvsServ.canWriteIn(data.conv, data.login, function (err, canWriteIn) {
-        if (err)
-            cb(err);
-        else {
-            if (canWriteIn) {
-                MessModl.create({
-                    content: data.content,
-                    login: data.login,
-                    conv: data.conv
-                }, function (err, Mess) {
-                    MesssServ.get(Mess._id, cb);
-                });
-            } else {
-                cb('unauthorized');
+    async.parallel([
+        function (cba) {
+            var mess = {};
+            for (var prop of MesssServ.simple) {
+                mess[prop] = messD[prop];
             }
-        }
-    });
-};
+            cba(null, mess);
+        },
+        function (cba) {
+            async.waterfall([
+                function (cbaa) {
 
-MesssServ.edit = function (data, cb) {
-    MessModl.findById(data._id, function (err, mess) {
+                    MembresServ.getLogin(messD.login, cbaa);
+                },
+                function (membre, cbaa) {
+                    MembresServ.simpleData(membre, cbaa);
+                }
+            ], cba);
+        }
+    ], function (err, res) {
         if (err) {
             cb(err);
         } else {
-            if (mess) {
-                mess.content = data.content;
-                // TODO Edit date
-                mess.save(cb);
-            } else {
-                cb('notfound');
-            }
+            mess = res[0];
+            mess.auteur = res[1];
+            cb(null, mess);
         }
     });
 };
 
-MesssServ.remove = function (id, cb) {
-    // TODO Trash
-    MessModl.remove({
-        _id: id
+MesssServ.get = function (id, cb) {
+    MessModl.findById(id, cb);
+};
+
+MesssServ.children = function (conv, cb) {
+    MessModl.find({
+        conv: conv,
+        $or: [{
+            hidden: false
+        }, {
+            hidden: undefined
+        }]
     }, cb);
+};
+
+MesssServ.assert = function (mess, cb) {
+    cb(null, mess.login && mess.content && mess.conv);
+};
+
+MesssServ.add = function (data, cb) {
+    MessModl.create({
+        content: data.content,
+        login: data.login,
+        conv: data.conv
+    }, cb);
+};
+
+MesssServ.edit = function (mess, data, cb) {
+    mess.content = data.content;
+    // TODO Edit date
+    mess.save(cb);
+};
+
+MesssServ.remove = function (id, cb) {
+    async.waterfall([function (cba) {
+        MesssServ.get(id, cba);
+    }, function (mess, cba) {
+        cba(mess ? null : 'notfound', mess);
+    }, function (mess, cba) {
+        mess.hidden = true;
+        mess.save(cba);
+    }], cb);
 };
 
 module.exports = MesssServ;
