@@ -2,84 +2,83 @@ var MessModl = require('../models/MessModl');
 var MembresServ = require('../services/MembresServ');
 var async = require('async');
 
-var MesssServ = {};
+var MesssServ = module.exports = {
 
-MesssServ.simple = ['_id', 'login', 'content', 'conv', 'date', 'hidden'];
+    simple: ['_id', 'login', 'content', 'conv', 'date', 'hidden'],
 
-MesssServ.simpleData = function (messD, cb) {
+    simpleData: function (messD, cb) {
 
-    async.parallel([
-        function (cba) {
-            var mess = {};
-            for (var prop of MesssServ.simple) {
-                mess[prop] = messD[prop];
-            }
-            cba(null, mess);
-        },
-        function (cba) {
-            async.waterfall([
-                function (cbaa) {
-
-                    MembresServ.getLogin(messD.login, cbaa);
-                },
-                function (membre, cbaa) {
-                    MembresServ.simpleData(membre, cbaa);
+        async.parallel([
+            function (cba) {
+                var mess = {};
+                for (var prop of MesssServ.simple) {
+                    mess[prop] = messD[prop];
                 }
-            ], cba);
-        }
-    ], function (err, res) {
-        if (err) {
-            cb(err);
-        } else {
-            mess = res[0];
-            mess.auteur = res[1];
-            cb(null, mess);
-        }
-    });
-};
+                cba(null, mess);
+            },
+            function (cba) {
+                async.waterfall([
+                    function (cbaa) {
 
-MesssServ.get = function (id, cb) {
-    MessModl.findById(id, cb);
-};
+                        MembresServ.getLogin(messD.login, cbaa);
+                    },
+                    function (membre, cbaa) {
+                        MembresServ.simpleData(membre, cbaa);
+                    }
+                ], cba);
+            }
+        ], function (err, res) {
+            if (err) {
+                cb(err);
+            } else {
+                mess = res[0];
+                mess.auteur = res[1];
+                cb(null, mess);
+            }
+        });
+    },
 
-MesssServ.children = function (conv, cb) {
-    MessModl.find({
-        conv: conv,
-        $or: [{
-            hidden: false
-        }, {
-            hidden: undefined
-        }]
-    }, cb);
-};
+    get: function (id, cb) {
+        MessModl.findById(id, cb);
+    },
 
-MesssServ.assert = function (mess, cb) {
-    cb(null, mess.login && mess.content && mess.conv);
-};
+    children: function (conv, cb) {
+        MessModl.find({
+            conv: conv,
+            $or: [{
+                hidden: false
+            }, {
+                hidden: undefined
+            }]
+        }, cb);
+    },
 
-MesssServ.add = function (data, cb) {
-    MessModl.create({
-        content: data.content,
-        login: data.login,
-        conv: data.conv
-    }, cb);
-};
+    assert: function (mess, cb) {
+        cb(null, mess.login && mess.content && mess.conv);
+    },
 
-MesssServ.edit = function (mess, data, cb) {
-    mess.content = data.content;
-    // TODO Edit date
-    mess.save(cb);
-};
+    add: function (data, cb) {
+        MessModl.create({
+            content: data.content,
+            login: data.login,
+            conv: data.conv
+        }, cb);
+    },
 
-MesssServ.remove = function (id, cb) {
-    async.waterfall([function (cba) {
-        MesssServ.get(id, cba);
-    }, function (mess, cba) {
-        cba(mess ? null : 'notfound', mess);
-    }, function (mess, cba) {
-        mess.hidden = true;
-        mess.save(cba);
-    }], cb);
-};
+    edit: function (mess, data, cb) {
+        mess.content = data.content;
+        // TODO Edit date
+        mess.save(cb);
+    },
 
-module.exports = MesssServ;
+    remove: function (id, cb) {
+        async.waterfall([function (cba) {
+            MesssServ.get(id, cba);
+        }, function (mess, cba) {
+            cba(mess ? null : 'notfound', mess);
+        }, function (mess, cba) {
+            mess.hidden = true;
+            mess.save(cba);
+        }], cb);
+    }
+};
