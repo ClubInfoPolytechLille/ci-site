@@ -3,7 +3,7 @@
   "main": "server.js",
   "repository": "https://github.com/ClubInfoPolytechLille/ci-site",
   "dependencies": {
-    "async": "^0.9.0",
+    "async": "^1.5.0",
     "body-parser": "^1.12.3",
     "compression": "^1.4.3",
     "connect-mongo": "^0.8.1",
@@ -11,9 +11,9 @@
     "express": "^4.12.3",
     "express-session": "^1.11.1",
     "mongoose": "^4.0.2",
-    "node-cache": "^2.1.1",
+    "node-cache": "^3.0.0",
     "serve-favicon": "^2.2.0",
     "ssh2": "^0.4.6",
-    "ursa": "^0.8.4"
+    "ursa": "^0.9.1"
   }
 }
