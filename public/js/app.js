@@ -1,4 +1,4 @@
-angular.module('ciApp', ['ngAnimate', 'ngRoute', 'ConnectCtrl', 'MembreCtrl', 'ForumDirCtrl', 'ForumConvCtrl', 'SessionsCtrl', 'ProfileCtrl']).config(function ($routeProvider, $locationProvider) {
+angular.module('ciApp', ['ngAnimate', 'ngRoute', 'ConnectCtrl', 'MembreCtrl', 'NinfoCtrl', 'ForumDirCtrl', 'ForumConvCtrl', 'SessionsCtrl', 'ProfileCtrl']).config(function ($routeProvider, $locationProvider) {
     $routeProvider
         .when('/', {
             templateUrl: 'views/home.html'
@@ -9,6 +9,10 @@ angular.module('ciApp', ['ngAnimate', 'ngRoute', 'ConnectCtrl', 'MembreCtrl', 'F
         })
         .when('/forum', {
             redirectTo: 'forum/dir/root'
+        })
+        .when('/ninfo', {
+            templateUrl: 'views/ninfo.html',
+            controller: 'NinfoCtrl'
         })
         .when('/forum/dir/:doss_id', {
             templateUrl: 'views/forumDir.html',

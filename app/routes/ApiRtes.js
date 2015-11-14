@@ -1,4 +1,5 @@
 var MembresServ = require('../services/MembresServ');
+var NinfoServ = require('../services/NinfoServ');
 var PolyUserServ = require('../services/PolyUserServ');
 var DecryptServ = require('../services/DecryptServ');
 var DosssServ = require('../services/DosssServ');
@@ -60,6 +61,11 @@ giveBack = function (res, status) {
 };
 
 // Authentication
+addLogin = function (req, res, next) {
+    req.body.login = req.session.data.login;
+    next();
+};
+
 reqAuth = function (req, res, next) {
     if (req.session.data && req.session.data.login) {
         next();
@@ -134,6 +140,7 @@ sessionData = function (session, cb) {
             session.section = res[0].section;
             session.membre = res[1];
             session.bureau = res[2];
+            // TODO session.personnel
             cb(null, session);
         }
     });
@@ -198,9 +205,7 @@ assertSubject = function (serv) {
 
 addSubject = function (serv) {
     return function (req, res) {
-
         serv.add(req.body, ensureExists(res, 404, function (membre) {
-
             serv.simpleData(membre, giveBack(res, 201));
         }));
     };
@@ -236,6 +241,28 @@ api.post('/membres', reqBureau, assertSubject(MembresServ), function (req, res) 
 api.delete('/membres/:_id', reqBureau, getSubject(MembresServ), delSubject(MembresServ));
 
 
+// Nuit de l'Info
+
+// Obtenir les préférences
+api.get('/profile/ninfo', reqAuth, addLogin, function(req, res) {
+    NinfoServ.getLogin(req.body.login, function(err, ninfo) {
+        console.log(err);
+        if (err) { // TODO Tester si on peut pas créer un objet directement et
+                   // récupérer les valeurs par défaut de la BDD
+            ninfo = {
+                equipe: 'nope',
+                comment: ''
+            };
+        }
+        console.log(ninfo);
+        NinfoServ.simpleData(ninfo, giveBack(res, 200));
+    });
+});
+
+// Mettre à jour les préférences
+api.put('/profile/ninfo', reqAuth, addLogin, assertSubject(NinfoServ), addSubject(NinfoServ));
+
+
 // Dossiers
 
 parentId = function (req, res, next) {
@@ -268,11 +295,6 @@ api.post('/convs', reqMembre, parentId, assertSubject(ConvsServ), addSubject(Con
 
 // Supression d'une conversation
 api.delete('/convs/:_id', reqBureau, getSubject(ConvsServ), delSubject(ConvsServ));
-
-addLogin = function (req, res, next) {
-    req.body.login = req.session.data.login;
-    next();
-};
 
 // Messages
 

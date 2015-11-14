@@ -1,0 +1,51 @@
+<div class="container">
+    <h1>Participer à la nuit de l'info !</h1>
+    <p>
+        À partir d'une problématique donnée, développer une application y répondant le tout en équipe et en une nuit, c'est possible, et c'est la Nuit de l'Info !
+    </p>
+
+    <h2>À qui cela s'adresse-t-il ?</h2>
+    <p>
+        Tout étudiant possédant des compétences utiles pour développer une application informatique est le bienvenu ! Que tu sois programmeur à tes heures libres, que tu suive juste tes cours d'informatique, mais aussi que tu sois graphiste, comunity manager en herbe, administrateur système ou même de créateurs de musique, tu y trouveras ton compte !
+    </p>
+
+    <h2>Où et quand cela se déroule-t-il ?</h2>
+    <p>
+        Cela se passe du 3 décembre à 16h40 jusqu'au 4 à 8h02, au bâtiment M3 sur Lille1.
+    </p>
+
+    <h2>J'ai d'autres questions, où puis-je trouver des informations en plus ?</h2>
+    <p>
+        Tu les trouvera peut-être sur <a href="http://www.nuitdelinfo.com/">le site officiel de la Nuit de l'Info</a>.<br/>
+        Sinon, n'hésite pas à envoyer <a href="mailto:cinforma@polytech-lille.net">un mail au Club Info</a> qui se fera un plaisir de te répondre !
+    <p>
+
+    <div ng-hide="session">
+    <h2>Ça a l'air cool, où est-ce qu'on s'inscrit ?</h2>
+    <p>
+        Si tu es Polytech Lillois, conncte-toi avec ton identifiant en haut à droite de cette page ! À tout de suite !<br/>
+        Si tu n'es pas Polytech Lillois (auquel cas je ne sais pas comment tu es arrivé ici), je te renvoie <a href="http://www.nuitdelinfo.com/">le site officiel de la Nuit de l'Info</a>.
+    </p>
+    </div>
+
+    <div ng-show="session">
+        <h2>Je souhaite participer à la nuit de l'info</h2>
+        <p>Ça c'est cool ! On a juste deux petites questions à te poser.</p>
+        <form>
+            <div class="form-group">
+                <label for="equipe">Dans quelle équipe souhaites-tu participer ?</label><br/>
+                <input type="radio" name="equipe" ng-model="ninfo.equipe" value="nope" checked> Je ne souhaite pas participer</input><br/>
+                <input type="radio" name="equipe" ng-model="ninfo.equipe" value="ci"> Avec le Club Info</input><br/>
+                <input type="radio" name="equipe" ng-model="ninfo.equipe" value="ima"> Avec les IMA</input><br/>
+                <input type="radio" name="equipe" ng-model="ninfo.equipe" value="gis"> Avec les GIS</input><br/>
+            </div>
+            <div class="form-group">
+                <label for="comment">Un petit commentaire ? (facultatif)</label>
+                <p>Tu pourrais nous dire quelles capacités tu possède, ou nous dire quel est ton engouement pour cette nuit de folie !</p>
+                <textarea ng-model="ninfo.comment" rows="4" cols="50" placeholder="Une fois quand j'avais 10 ans j'ai codé un mini-site en PHP qui donnait ton âge à partir de ta date de naissance et de l'année actuelle. J'aimerais trop mettre à profit mes capacités pour cette nuit de folie !"></textarea>
+            </div>
+            <button type="submit" ladda="saving" class="btn btn-primary" ng-click="save()">Enregistrer les préférences</button>
+        </form>
+    </div>
+    <br/>
+</div>
