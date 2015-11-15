@@ -246,15 +246,6 @@ api.delete('/membres/:_id', reqBureau, getSubject(MembresServ), delSubject(Membr
 // Obtenir les préférences
 api.get('/profile/ninfo', reqAuth, addLogin, function(req, res) {
     NinfoServ.getLogin(req.body.login, function(err, ninfo) {
-        console.log(err);
-        if (err) { // TODO Tester si on peut pas créer un objet directement et
-                   // récupérer les valeurs par défaut de la BDD
-            ninfo = {
-                equipe: 'nope',
-                comment: ''
-            };
-        }
-        console.log(ninfo);
         NinfoServ.simpleData(ninfo, giveBack(res, 200));
     });
 });
@@ -262,6 +253,39 @@ api.get('/profile/ninfo', reqAuth, addLogin, function(req, res) {
 // Mettre à jour les préférences
 api.put('/profile/ninfo', reqAuth, addLogin, assertSubject(NinfoServ), addSubject(NinfoServ));
 
+// Lister les participants
+api.get('/ninfo', reqAuth, function(req, res) {
+    NinfoServ.list(function (err, participants) {
+        async.reduce(NinfoServ.equipes, {}, function(memo, nomEquipe, cb) {
+            async.filter(participants, function concerne(participant, cbf) {
+                console.log(270);
+                cbf(participant.equipe == nomEquipe);
+            }, function addInfos(membres) {
+                console.log(272, membres);
+                async.map(membres, function (membre, cba) {
+                    console.log(274, membre);
+                    async.parallel([function(cbp) {
+                        PolyUserServ.grabInfos(membre.login, cbp);
+                    }, function(cbp) {
+                        NinfoServ.simpleData(membre, cbp);
+                    }], function(err, results) {
+                        var membreFinal = results[0];
+                        membreFinal.equipe = results[1].equipe;
+                        membreFinal.comment = results[1].comment;
+                        console.log(276, membreFinal);
+                        cba(null, membreFinal);
+                    });
+                }, function (err, membres) {
+                    memo[nomEquipe] = membres;
+                    console.log(278, memo);
+                    cb(null, memo);
+                });
+            });
+        }, function gb(err, data) {
+            res.status(200).json(data);
+        });
+    });
+});
 
 // Dossiers
 

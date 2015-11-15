@@ -6,7 +6,7 @@ var NinfoServ = module.exports = {
 
     equipes: ['nope', 'ci', 'imagis', 'ima5'],
 
-    simple: ['equipe', 'comment'],
+    simple: ['login', 'equipe', 'comment'],
 
     simpleData: function (ninfoD, cb) {
         var ninfo = {};
@@ -42,6 +42,10 @@ var NinfoServ = module.exports = {
             ninfo.comment = data.comment;
             ninfo.save(cb);
         });
-    }
+    },
+
+    list: function (cb) {
+        NinfoModl.find({}, cb);
+    },
 
 };

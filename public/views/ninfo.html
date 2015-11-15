@@ -30,7 +30,7 @@
     </div>
 
     <div ng-show="session">
-        <h2>Je souhaite participer à la nuit de l'info</h2>
+        <h2>Je souhaite participer à la Nuit de l'Info</h2>
         <form ng-hide="ninfo.equipe == 'ima5'">
             <p>Ça c'est cool ! On a juste deux petites questions à te poser.</p>
             <div class="form-group">
@@ -49,6 +49,22 @@
         <p ng-show="ninfo.equipe == 'ima5'">
             Tu es déjà inscrit dans l'équipe des IMA5 (référent : <a href="mailto:jwasilew@polytech-lille.net">Jean Wasilewski</a>) ! Enjoy ;)
         </p>
+        <h2>Participants à la Nuit de l'Info</h2>
+        <h3>Équipe Informatiquement Vôtre <span class="badge">{{ equipes.ci.length }}</span></h3>
+        <div class="panel panel-default" ng-repeat="membre in equipes.ci">
+            <div class="panel-heading"><strong>{{ membre.nom }}</strong> ({{ membre.section }})</div>
+            <div class="panel-body" ng-show="membre.comment">{{ membre.comment }}</div>
+        </div>
+        <h3>Équipe 404 Brain Not Found <span class="badge">{{ equipes.imagis.length }}</span></h3>
+        <div class="panel panel-default" ng-repeat="membre in equipes.imagis">
+            <div class="panel-heading"><strong>{{ membre.nom }}</strong> ({{ membre.section }})</div>
+            <div class="panel-body" ng-show="membre.comment">{{ membre.comment }}</div>
+        </div>
+        <h3>Équipe IMA5 (fermée) <span class="badge">{{ equipes.ima5.length }}</span></h3>
+        <div class="panel panel-default" ng-repeat="membre in equipes.ima5">
+            <div class="panel-heading"><strong>{{ membre.nom }}</strong> ({{ membre.section }})</div>
+            <div class="panel-body" ng-show="membre.comment">{{ membre.comment }}</div>
+        </div>
     </div>
     <br/>
 </div>

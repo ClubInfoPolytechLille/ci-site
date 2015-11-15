@@ -13,6 +13,10 @@ angular.module('NinfoCtrl', ['SessionsServ', 'ApiServ', 'NotifyServ'])
                 if (!err)
                     $scope.ninfo = ninfo;
             });
+            ApiServ("récupération de la liste des participants à Nuit de l'Info", 'get', 'ninfo', null, function (err, equipes) {
+                if (!err)
+                    $scope.equipes = equipes;
+            });
         }
 
         $scope.save = function () {
