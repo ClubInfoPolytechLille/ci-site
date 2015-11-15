@@ -13,15 +13,12 @@
                 <th ng-show="session.bureau">Action</th>
             </tr>
         </thead>
-        <tbody as-sortable="dragControlListeners" ng-model="membres">
-            <tr ng-repeat="membre in membres" as-sortable-item ng-class="{bureau: membre.bureau}">
+        <tbody ng-model="membres">
+            <tr ng-repeat="membre in membres" ng-class="{bureau: membre.bureau}">
                 <td>{{ membre.nom }}</td>
                 <td>{{ membre.section }}</td>
                 <td>{{ membre.role }}</td>
                 <td ng-show="session.bureau">
-                    <button type="button" class="btn btn-default" aria-label="Déplacer" data-as-sortable-item-handle>
-                        <span class="glyphicon glyphicon-resize-vertical" aria-hidden="true"></span>
-                    </button>
                     <button type="button" class="btn btn-danger" aria-label="Expulser" ng-click="deleteMembre($index)">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     </button>
