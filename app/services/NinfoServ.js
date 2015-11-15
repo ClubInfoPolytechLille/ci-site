@@ -4,7 +4,7 @@ var async = require('async');
 
 var NinfoServ = module.exports = {
 
-    equipes: ['nope', 'ci', 'imagis', 'ima5'],
+    equipes: ['nope', 'ci', 'imagis', 'gis', 'ima5'],
 
     simple: ['login', 'equipe', 'comment'],
 
