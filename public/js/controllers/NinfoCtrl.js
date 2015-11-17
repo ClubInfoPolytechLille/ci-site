@@ -1,4 +1,4 @@
-angular.module('NinfoCtrl', ['SessionsServ', 'ApiServ', 'NotifyServ'])
+angular.module('NinfoCtrl', ['nl2br', 'SessionsServ', 'ApiServ', 'NotifyServ'])
     .controller('NinfoCtrl', function ($scope, SessionServ, ApiServ, NotifyServ) {
         $scope.ninfo = {}
         $scope.saving = false;

@@ -61,22 +61,22 @@
         <h3>Équipe Informatiquement Vôtre <span class="badge">{{ equipes.ci.length }}</span></h3>
         <div class="panel panel-default" ng-repeat="membre in equipes.ci">
             <div class="panel-heading"><strong>{{ membre.nom }}</strong> ({{ membre.section }})</div>
-            <div class="panel-body" ng-show="membre.comment">{{ membre.comment }}</div>
+            <div class="panel-body" ng-show="membre.comment" ng-bind-html="membre.comment | nl2br"></div>
         </div>
         <h3>Équipe 404 Brain Not Found <span class="badge">{{ equipes.imagis.length }}</span></h3>
         <div class="panel panel-default" ng-repeat="membre in equipes.imagis">
             <div class="panel-heading"><strong>{{ membre.nom }}</strong> ({{ membre.section }})</div>
-            <div class="panel-body" ng-show="membre.comment">{{ membre.comment }}</div>
+            <div class="panel-body" ng-show="membre.comment" ng-bind-html="membre.comment | nl2br"></div>
         </div>
         <h3>Équipe GIS <span class="badge">{{ equipes.gis.length }}</span></h3>
         <div class="panel panel-default" ng-repeat="membre in equipes.gis">
             <div class="panel-heading"><strong>{{ membre.nom }}</strong> ({{ membre.section }})</div>
-            <div class="panel-body" ng-show="membre.comment">{{ membre.comment }}</div>
+            <div class="panel-body" ng-show="membre.comment" ng-bind-html="membre.comment | nl2br"></div>
         </div>
         <h3>Équipe IMA5 (fermée) <span class="badge">{{ equipes.ima5.length }}</span></h3>
         <div class="panel panel-default" ng-repeat="membre in equipes.ima5">
             <div class="panel-heading"><strong>{{ membre.nom }}</strong> ({{ membre.section }})</div>
-            <div class="panel-body" ng-show="membre.comment">{{ membre.comment }}</div>
+            <div class="panel-body" ng-show="membre.comment" ng-bind-html="membre.comment | nl2br"></div>
         </div>
     </div>
     <br/>
