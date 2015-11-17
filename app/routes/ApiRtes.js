@@ -136,11 +136,9 @@ sessionData = function (session, cb) {
         if (err) {
             cb(err);
         } else {
-            session.nom = res[0].nom;
-            session.section = res[0].section;
+            for (var attrname in res[0]) { session[attrname] = res[0][attrname]; }
             session.membre = res[1];
             session.bureau = res[2];
-            // TODO session.personnel
             cb(null, session);
         }
     });
@@ -258,26 +256,21 @@ api.get('/ninfo', reqAuth, function(req, res) {
     NinfoServ.list(function (err, participants) {
         async.reduce(NinfoServ.equipes, {}, function(memo, nomEquipe, cb) {
             async.filter(participants, function concerne(participant, cbf) {
-                console.log(270);
                 cbf(participant.equipe == nomEquipe);
             }, function addInfos(membres) {
-                console.log(272, membres);
                 async.map(membres, function (membre, cba) {
-                    console.log(274, membre);
                     async.parallel([function(cbp) {
-                        PolyUserServ.grabInfos(membre.login, cbp);
+                        PolyUserServ.get(membre.login, cbp);
                     }, function(cbp) {
                         NinfoServ.simpleData(membre, cbp);
                     }], function(err, results) {
                         var membreFinal = results[0];
                         membreFinal.equipe = results[1].equipe;
                         membreFinal.comment = results[1].comment;
-                        console.log(276, membreFinal);
                         cba(null, membreFinal);
                     });
                 }, function (err, membres) {
                     memo[nomEquipe] = membres;
-                    console.log(278, memo);
                     cb(null, memo);
                 });
             });

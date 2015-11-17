@@ -85,9 +85,22 @@ var PolyUserServ = module.exports = {
             if (err) {
                 cb(err);
             } else {
+                var nom = (passwd && passwd.GECOS) ? passwd.GECOS : login.toUpperCase(); 
+                var section = (group && group.name) ? group.name.toUpperCase() : ((passwd && passwd.GID) ? passwd.GID : 'Inconnu'); 
+                var ancien = !!section.match("[0-9]{4}");
+                var enseignant  = !!section.match("ENS$");
+                var personnel = enseignant;
+                var etudiant = !personnel;
+                var enCours = etudiant && !ancien;
                 cb(null, {
-                    nom: (passwd && passwd.GECOS) ? passwd.GECOS : login.toUpperCase(),
-                    section: (group && group.name) ? group.name.toUpperCase() : ((passwd && passwd.GID) ? passwd.GID : 'Inconnu')
+                    nom: nom,
+                    prenom: nom.split(' ')[0],
+                    section: section,
+                    ancien: ancien,
+                    enseignant: enseignant,
+                    personnel: personnel,
+                    etudiant: etudiant,
+                    enCours: enCours
                 });
             }
         });
