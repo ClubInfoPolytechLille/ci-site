@@ -93,6 +93,7 @@ var PolyUserServ = module.exports = {
                 var etudiant = !personnel;
                 var enCours = etudiant && !ancien;
                 cb(null, {
+                    login: login,
                     nom: nom,
                     prenom: nom.split(' ')[0],
                     section: section,
