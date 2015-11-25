@@ -31,14 +31,16 @@
 
     <div ng-show="session">
         <h2>Je souhaite participer à la Nuit de l'Info</h2>
-        <form ng-show="session.enCours && ninfo.equipe != 'ima5'">
+        <div class="alert alert-danger" role="alert">Inscriptions closes.</div>
+        <div class="alert alert-info" role="alert">Si vous ne souhaitez plus participer, vous pouvez cependant vous désinscre. Ça fera de la place pour les autres !</div>
+        <form ng-show="session.enCours">
             <p>Ça c'est cool ! On a juste deux petites questions à te poser.</p>
             <div class="form-group">
                 <label for="equipe">Dans quelle équipe souhaites-tu participer ?</label><br/>
                 <input type="radio" name="equipe" ng-model="ninfo.equipe" value="nope" checked> Je ne souhaite pas participer</input><br/>
-                <input type="radio" name="equipe" ng-model="ninfo.equipe" value="ci"> Équipe « Informatiquement Vôtre », pour se donner au max (référent : <a href="mailto:gbontoux@polytech-lille.net">Geoffrey Preud'homme</a>)</input><br/>
-                <input type="radio" name="equipe" ng-model="ninfo.equipe" value="imagis"> Équipe « 404 Brain Not Found », surtout pour passer un bon moment (pas de référent pour le moment, proposez-vous en commentaire !)</input><br/>
-                <input type="radio" name="equipe" ng-model="ninfo.equipe" value="gis"> Équipe des GIS, (référent : <a href="mailto:kletupe@polytech-lille.net">Kévin Letupe</a>)</input><br/>
+                <input disabled type="radio" name="equipe" ng-model="ninfo.equipe" value="ci"> Équipe « Informatiquement Vôtre », pour se donner au max (référent : <a href="mailto:gbontoux@polytech-lille.net">Geoffrey Preud'homme</a>)</input><br/>
+                <input disabled type="radio" name="equipe" ng-model="ninfo.equipe" value="imagis"> Équipe « 404 Brain Not Found », surtout pour passer un bon moment (pas de référent pour le moment, proposez-vous en commentaire !)</input><br/>
+                <input disabled type="radio" name="equipe" ng-model="ninfo.equipe" value="gis"> Équipe des GIS, (référent : <a href="mailto:kletupe@polytech-lille.net">Kévin Letupe</a>)</input><br/>
             </div>
             <div class="form-group">
                 <label for="comment">Un petit commentaire ? (facultatif)</label>
@@ -47,10 +49,6 @@
             </div>
             <button type="submit" ladda="saving" class="btn btn-primary" ng-click="save()">Enregistrer les préférences</button>
         </form>
-
-        <p ng-show="ninfo.equipe == 'ima5'">
-            Tu es déjà inscrit dans l'équipe des IMA5 (référent : <a href="mailto:jwasilew@polytech-lille.net">Jean Wasilewski</a>) ! Enjoy ;)
-        </p>
 
         <p ng-hide="session.enCours">
             Seuls les étudiants avec une année en cours peuvent participer. Vous ne pouvez donc pas vous inscrire.<br/>
