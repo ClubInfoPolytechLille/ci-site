@@ -1,5 +1,4 @@
 var MembresServ = require('../services/MembresServ');
-var NinfoServ = require('../services/NinfoServ');
 var PolyUserServ = require('../services/PolyUserServ');
 var DecryptServ = require('../services/DecryptServ');
 var DosssServ = require('../services/DosssServ');
@@ -238,47 +237,6 @@ api.post('/membres', reqBureau, assertSubject(MembresServ), function (req, res) 
 // Supression d'un membre
 api.delete('/membres/:_id', reqBureau, getSubject(MembresServ), delSubject(MembresServ));
 
-
-// Nuit de l'Info
-
-// Obtenir les préférences
-api.get('/profile/ninfo', reqAuth, addLogin, function(req, res) {
-    NinfoServ.getLogin(req.body.login, function(err, ninfo) {
-        NinfoServ.simpleData(ninfo, giveBack(res, 200));
-    });
-});
-
-// Mettre à jour les préférences
-api.put('/profile/ninfo', reqAuth, addLogin, assertSubject(NinfoServ), addSubject(NinfoServ));
-
-// Lister les participants
-api.get('/ninfo', reqAuth, function(req, res) {
-    NinfoServ.list(function (err, participants) {
-        async.reduce(NinfoServ.equipes, {}, function(memo, nomEquipe, cb) {
-            async.filter(participants, function concerne(participant, cbf) {
-                cbf(participant.equipe == nomEquipe);
-            }, function addInfos(membres) {
-                async.map(membres, function (membre, cba) {
-                    async.parallel([function(cbp) {
-                        PolyUserServ.get(membre.login, cbp);
-                    }, function(cbp) {
-                        NinfoServ.simpleData(membre, cbp);
-                    }], function(err, results) {
-                        var membreFinal = results[0];
-                        membreFinal.equipe = results[1].equipe;
-                        membreFinal.comment = results[1].comment;
-                        cba(null, membreFinal);
-                    });
-                }, function (err, membres) {
-                    memo[nomEquipe] = membres;
-                    cb(null, memo);
-                });
-            });
-        }, function gb(err, data) {
-            res.status(200).json(data);
-        });
-    });
-});
 
 // Dossiers
 
