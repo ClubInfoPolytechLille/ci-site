@@ -13,6 +13,9 @@ angular.module('ciApp', ['ngAnimate', 'ngRoute', 'ConnectCtrl', 'MembreCtrl', 'F
         .when('/ninfo', {
             templateUrl: 'views/ninfo.html'
         })
+        .when('/trosh', {
+            templateUrl: 'views/trosh.html'
+        })
         .when('/forum/dir/:doss_id', {
             templateUrl: 'views/forumDir.html',
             controller: 'ForumDirCtrl'
