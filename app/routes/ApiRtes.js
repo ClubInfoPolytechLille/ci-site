@@ -1,4 +1,5 @@
 var MembresServ = require('../services/MembresServ');
+var NinfoServ = require('../services/NinfoServ');
 var PolyUserServ = require('../services/PolyUserServ');
 var DecryptServ = require('../services/DecryptServ');
 var DosssServ = require('../services/DosssServ');
@@ -237,6 +238,25 @@ api.post('/membres', reqBureau, assertSubject(MembresServ), function (req, res) 
 // Supression d'un membre
 api.delete('/membres/:_id', reqBureau, getSubject(MembresServ), delSubject(MembresServ));
 
+
+// Nuit de l'Info
+
+// Obtenir les préférences
+api.get('/profile/ninfo', reqAuth, addLogin, function(req, res) {
+    NinfoServ.getLogin(req.body.login, function(err, ninfo) {
+        NinfoServ.simpleData(ninfo, giveBack(res, 200));
+    });
+});
+
+// Mettre à jour les préférences
+api.put('/profile/ninfo', reqAuth, addLogin, assertSubject(NinfoServ), addSubject(NinfoServ));
+
+// Lister les participants
+api.get('/ninfo', reqAuth, function(req, res) {
+    NinfoServ.listEquipes(function (err, data) {
+        res.status(200).json(data);
+    });
+});
 
 // Dossiers
 
