@@ -8,8 +8,8 @@ var NinfoServ = module.exports = {
         {id: 'nope', desc : "Je ne souhaite pas participer", ouvert: true, show: false},
         {id: 'ci', desc : "Équipe « Kilobits », pour se donner à fond", referent: ["Benoit Verhaeghe", "Benoit.Verhaeghe@polytech-lille.net"], ouvert: true, show: true},
         {id: 'nobrain', desc : "Équipe « 404 Brain Not Found », surtout pour passer un bon moment", referent: ["Cédric Roussel", "Cedric.Roussel@polytech-lille.net"], ouvert: true, show: true},
-        {id: 'gis5', desc : "Équipe GIS5", referent: ["Thibault Giordan", "Thibault.Giordan@polytech-lille.net"], ouvert: false, show: false},
         {id: 'peip', desc : "Équipe « PREPAration de l'IMAGISnation », des PeiP sérieux", referent: ["Romain Bailleul", "Romain.Bailleul@polytech-lille.net"], ouvert: true, show: true},
+        {id: 'gis5', desc : "Équipe GIS5", referent: ["Thibault Giordan", "Thibault.Giordan@polytech-lille.net"], ouvert: false, show: false},
         {id: 'other', desc : "Une autre équipe ?", referent: ["Geoffrey Preud'homme", "Geoffrey.Bontoux-Preud-Homme@polytech-lille.net"], ouvert: false, show: false},
     ],
 
