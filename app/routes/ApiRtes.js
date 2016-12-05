@@ -1,5 +1,4 @@
 var MembresServ = require('../services/MembresServ');
-var NinfoServ = require('../services/NinfoServ');
 var PolyUserServ = require('../services/PolyUserServ');
 var DecryptServ = require('../services/DecryptServ');
 var DosssServ = require('../services/DosssServ');
@@ -238,50 +237,6 @@ api.post('/membres', reqBureau, assertSubject(MembresServ), function (req, res) 
 
 // Supression d'un membre
 api.delete('/membres/:_id', reqBureau, getSubject(MembresServ), delSubject(MembresServ));
-
-
-// Nuit de l'Info
-
-// Obtenir les préférences
-api.get('/profile/ninfo', reqAuth, addLogin, function(req, res) {
-    NinfoServ.getLogin(req.body.login, function(err, ninfo) {
-        NinfoServ.simpleData(ninfo, giveBack(res, 200));
-    });
-});
-
-// Mettre à jour les préférences
-api.put('/profile/ninfo', reqAuth, addLogin, assertSubject(NinfoServ), addSubject(NinfoServ));
-
-// Lister les participants
-api.get('/ninfo', reqAuth, function(req, res) {
-    NinfoServ.listEquipes(function (err, data) {
-        res.status(200).json(data);
-    });
-});
-
-api.get('/ninforef', function(req, res) {
-    NinfoServ.listEquipes(function (err, data) {
-        if (req.query.pw == config.ninforef) {
-            text = '<pre>'
-            for (e in data) {
-                equipe = data[e]
-                text += equipe.desc+'\n';
-                text += '===========================\n';
-                for (m in equipe.membres) {
-                    membre = equipe.membres[m]
-                    text += 'Nom : ' + membre.nom + '\n';
-                    text += 'Section (pour l\'année) : ' + membre.section + '\n';
-                    text += 'Mail : ' + membre.login + '@polytech-lille.net\n';
-                    text += '\n'
-                }
-                text += '\n'
-            }
-            res.status(200).send(text);
-        } else {
-            res.status(401).send("Mauvais mot de passe");
-        }
-    });
-});
 
 // Dossiers
 
